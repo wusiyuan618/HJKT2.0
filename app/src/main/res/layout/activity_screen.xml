@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/layout_total"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.8"
+        android:background="#000000"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+    <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="500dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+        <LinearLayout
+                android:layout_gravity="center"
+                android:layout_width="500dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+            <TextView
+                    android:id="@+id/tvAirQualityDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="室内空气质量/AQI"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp" />
+
+            <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp">
+                <RelativeLayout
+                        android:background="@mipmap/icon_excellent"
+                        android:id="@+id/rlAQI"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp">
+                    <TextView
+                            android:layout_centerInParent="true"
+                            android:id="@+id/tvAQI"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#44D83F"
+                            android:textSize="80sp" />
+                </RelativeLayout>
+
+
+                <TextView
+                        android:id="@+id/tvAQIQuality"
+                        android:layout_width="60dp"
+                        android:layout_height="34dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_toRightOf="@id/rlAQI"
+                        android:background="@drawable/bg_aqi"
+                        android:gravity="center"
+                        android:text="优"
+                        android:textColor="#FFFFFF"
+                        android:textSize="26sp" />
+
+                <ImageView
+                        android:id="@+id/ivTempCount"
+                        android:layout_width="20dp"
+                        android:layout_height="50dp"
+                        android:layout_alignLeft="@id/tvAQIQuality"
+                        android:layout_alignBottom="@id/rlAQI"
+                        android:src="@mipmap/icon_temperature" />
+
+                <TextView
+                        android:id="@+id/tvTempCount"
+                        android:layout_marginTop="40dp"
+                        android:layout_below="@id/tvAQIQuality"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@id/ivTempCount"
+                        android:textColor="#ffffffff"
+                        android:textSize="36sp" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/ivTempCount"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@id/ivTempCount"
+                        android:text="温度 Temperature"
+                        android:textColor="#ffffffff"
+                        android:textSize="20sp" />
+            </RelativeLayout>
+            <ImageView
+                    android:layout_marginTop="40dp"
+                    android:src="@mipmap/icon_dividing_line"
+                    android:scaleType="fitXY"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="32dp"
+                    android:orientation="vertical"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp">
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="湿度"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+
+                    <TextView
+                            android:id="@+id/tvHumCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:gravity="right"
+                            android:text="获取中..."
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:id="@+id/tvCO2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="二氧化碳"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@id/tvCO2"
+                            android:text="(CO2)"
+                            android:textColor="#666666"
+                            android:textSize="20sp" />
+
+                    <TextView
+                            android:id="@+id/tvCO2Count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:gravity="right"
+                            android:text="获取中..."
+                            android:layout_centerVertical="true"
+
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:id="@+id/tvPm25"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="空气质量指数"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@id/tvPm25"
+                            android:layout_weight="1"
+                            android:text="(PM2.5)"
+                            android:textColor="#666666"
+                            android:textSize="24sp" />
+
+                    <TextView
+                            android:id="@+id/tvPM25Count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:text="获取中..."
+                            android:textColor="#FFFFFF"
+                            android:layout_centerVertical="true"
+
+                            android:textSize="24sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:id="@+id/tvTVOC"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_weight="1"
+                            android:text="TVOC"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@id/tvTVOC"
+                            android:layout_weight="1"
+                            android:text="(TVOC)"
+                            android:textColor="#666666"
+                            android:textSize="24sp" />
+
+                    <TextView
+                            android:id="@+id/tvTVOCCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:text="获取中..."
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+                </RelativeLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="500dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+        <com.wusy.serialportproject.view.ClockView
+                android:id="@+id/clockView"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        <RelativeLayout
+                android:id="@+id/rlNumberClock"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:layout_width="500dp"
+                android:background="@mipmap/icon_circle_clock"
+                android:layout_height="500dp">
+            <LinearLayout
+                    android:layout_centerInParent="true"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                <TextView
+                        android:id="@+id/tvTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10:35"
+                        android:textColor="#ffffffff"
+                        android:textSize="100sp"
+                        />
+                <TextView
+                        android:id="@+id/tvContent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="上午- 星期天-3月11日"
+                        android:textColor="#ffffffff"
+                        android:textSize="28sp"
+                        />
+            </LinearLayout>
+        </RelativeLayout>
+        <LinearLayout
+                android:id="@+id/llOutside"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:layout_width="500dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+            <TextView
+                    android:id="@+id/tvOutSideAirQualityDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="室外空气质量/AQI"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp" />
+
+            <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp">
+                <RelativeLayout
+                        android:background="@mipmap/icon_excellent"
+                        android:id="@+id/rlOutSideAQI"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp">
+                    <TextView
+                            android:layout_centerInParent="true"
+                            android:id="@+id/tvOutSideAQI"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#44D83F"
+                            android:textSize="80sp" />
+                </RelativeLayout>
+
+
+                <TextView
+                        android:id="@+id/tvOutSideAQIQuality"
+                        android:layout_width="60dp"
+                        android:layout_height="34dp"
+                        android:layout_marginLeft="30dp"
+                        android:layout_toRightOf="@id/rlOutSideAQI"
+                        android:background="@drawable/bg_aqi"
+                        android:gravity="center"
+                        android:text="优"
+                        android:textColor="#FFFFFF"
+                        android:textSize="26sp" />
+
+                <ImageView
+                        android:id="@+id/ivOutSideTempCount"
+                        android:layout_width="20dp"
+                        android:layout_height="50dp"
+                        android:layout_alignLeft="@id/tvOutSideAQIQuality"
+                        android:layout_alignBottom="@id/rlOutSideAQI"
+                        android:src="@mipmap/icon_temperature" />
+
+                <TextView
+                        android:id="@+id/tvOutSideTempCount"
+                        android:layout_marginTop="40dp"
+                        android:layout_below="@id/tvOutSideAQIQuality"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@id/ivOutSideTempCount"
+                        android:textColor="#ffffffff"
+                        android:textSize="36sp" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/ivOutSideTempCount"
+                        android:layout_marginLeft="10dp"
+                        android:layout_toRightOf="@id/ivOutSideTempCount"
+                        android:text="温度 Temperature"
+                        android:textColor="#ffffffff"
+                        android:textSize="20sp" />
+            </RelativeLayout>
+            <ImageView
+                    android:layout_marginTop="40dp"
+                    android:src="@mipmap/icon_dividing_line"
+                    android:scaleType="fitXY"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="32dp"
+                    android:orientation="vertical"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp">
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="湿度"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+
+                    <TextView
+                            android:id="@+id/tvOutSideHumCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:gravity="right"
+                            android:text="获取中..."
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:id="@+id/tvOutSideDirect"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="风向"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@id/tvOutSideDirect"
+                            android:text="(Direct)"
+                            android:textColor="#666666"
+                            android:textSize="20sp" />
+
+                    <TextView
+                            android:id="@+id/tvOutSideDirectCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:gravity="right"
+                            android:text="获取中..."
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:id="@+id/tvOutSidePower"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:text="风力"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@id/tvOutSidePower"
+                            android:layout_weight="1"
+                            android:text="(power)"
+                            android:textColor="#666666"
+                            android:textSize="24sp" />
+
+                    <TextView
+                            android:id="@+id/tvOutSidePowerCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:text="获取中..."
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+                </RelativeLayout>
+
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:id="@+id/tvOutSideInfo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_weight="1"
+                            android:text="天气情况"
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@id/tvOutSideInfo"
+                            android:layout_weight="1"
+                            android:text="(info)"
+                            android:textColor="#666666"
+                            android:textSize="24sp" />
+
+                    <TextView
+                            android:id="@+id/tvOutSideInfoCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:text="获取中..."
+                            android:textColor="#FFFFFF"
+                            android:textSize="24sp" />
+                </RelativeLayout>
+
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

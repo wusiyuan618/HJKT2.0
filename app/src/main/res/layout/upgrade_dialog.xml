@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/upgrade_bg"
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/dialog_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dip"
+            android:gravity="center"
+            android:text="发现新版本"
+            android:textColor="#5390f8"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_marginTop="10dp"
+            android:background="#5390F8" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/upgradeText"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginLeft="16dip"
+        android:layout_marginTop="10dp"
+        android:text=""
+        android:textColor="#666666"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dip"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btn_cancle"
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/latter_btn_state"
+            android:layout_weight="1"
+            android:text="忽略本次"
+            android:textColor="#999999"
+            android:layout_marginRight="5dp"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_sure"
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/update_btn_state"
+            android:text="立即更新"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:textColor="#f0f0f0"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</LinearLayout>

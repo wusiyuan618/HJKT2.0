@@ -1,0 +1,145 @@
+<RelativeLayout android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:visibility="visible"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="34dp"
+            android:text="时间"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp" />
+
+    <TextView
+            android:id="@+id/roomName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvTime"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="84dp"
+            android:visibility="invisible"
+            android:text="客厅"
+            android:textColor="#FFFFFF"
+            android:textSize="40sp" />
+
+    <RelativeLayout
+            android:id="@+id/rlTempView"
+            android:layout_width="600dp"
+            android:layout_height="600dp"
+            android:layout_below="@id/roomName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp">
+
+        <com.wusy.serialportproject.view.CirqueProgressControlView
+                android:id="@+id/tempControlView"
+                android:layout_width="500dp"
+                android:layout_height="500dp"
+                android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+    <LinearLayout
+            android:layout_marginBottom="94dp"
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <LinearLayout
+                android:id="@+id/llON"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+            <ImageView
+                    android:src="@mipmap/btn_close"
+                    android:id="@+id/ivON"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            <TextView
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/tvON"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="开启"
+                    android:textColor="#ffffffff"
+                    android:textSize="24sp" />
+        </LinearLayout>
+        <LinearLayout
+                android:id="@+id/llNormal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+            <ImageView
+                    android:src="@mipmap/btn_daily_normal"
+                    android:id="@+id/ivNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            <TextView
+                    android:id="@+id/tvNormal"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="日常"
+                    android:textColor="#ffffffff"
+                    android:textSize="24sp" />
+        </LinearLayout>
+        <LinearLayout
+                android:id="@+id/llLJ"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+            <ImageView
+                    android:src="@mipmap/btn_outhome_normal"
+                    android:id="@+id/ivLJ"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            <TextView
+                    android:id="@+id/tvLJ"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="离家"
+                    android:textColor="#ffffffff"
+                    android:textSize="24sp" />
+        </LinearLayout>
+        <LinearLayout
+                android:id="@+id/llJN"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+            <ImageView
+                    android:src="@mipmap/btn_energy_normal"
+                    android:id="@+id/ivJN"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            <TextView
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/tvJN"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="节能"
+                    android:textColor="#ffffffff"
+                    android:textSize="24sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

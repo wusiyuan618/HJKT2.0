@@ -1,0 +1,229 @@
+<RelativeLayout android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="82dp"
+            android:layout_marginTop="30dp"
+            android:text=""
+            android:textColor="#FFFFFF"
+            android:textSize="24sp" />
+
+    <RelativeLayout
+            android:id="@+id/rlHumidity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rlTemp"
+            android:layout_marginLeft="140dp"
+            android:layout_marginTop="40dp">
+
+        <ImageView
+                android:id="@+id/ivHumidity"
+                android:layout_width="20dp"
+                android:layout_height="28dp"
+                android:layout_alignTop="@id/tvHumidityContent"
+                android:src="@mipmap/icon_humidity" />
+
+        <TextView
+                android:id="@+id/tvHumidityCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvHumidityContent"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="20dp"
+                android:layout_toEndOf="@id/ivHumidity"
+                android:textColor="#FFFFFF"
+                android:textSize="44sp" />
+
+        <TextView
+                android:id="@+id/tvHumidityUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/tvHumidityCount"
+                android:layout_toRightOf="@id/tvHumidityCount"
+                android:text="%RH"
+                android:textColor="#FFFFFF"
+                android:textSize="30sp" />
+
+        <TextView
+                android:id="@+id/tvHumidityContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tvHumidityCount"
+                android:layout_marginTop="20dp"
+                android:text="湿度 Humidity"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:id="@+id/rlAirQuality"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rlHumidity"
+            android:layout_marginStart="140dp"
+            android:layout_marginTop="40dp">
+
+        <ImageView
+                android:id="@+id/ivAirQuality"
+                android:layout_width="20dp"
+                android:layout_height="28dp"
+                android:layout_alignTop="@id/tvAirQualityContent"
+                android:src="@mipmap/icon_air_quality" />
+
+        <TextView
+                android:id="@+id/tvAirQualityCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvAirQualityContent"
+                android:layout_marginLeft="36dp"
+                android:layout_toRightOf="@id/ivAirQuality"
+                android:textColor="#FFFFFF"
+                android:textSize="44sp" />
+
+        <TextView
+                android:id="@+id/tvAirQualityUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/tvAirQualityCount"
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@id/tvAirQualityCount"
+                android:text="AQI"
+                android:textColor="#FFFFFF"
+                android:textSize="30sp" />
+
+        <TextView
+                android:id="@+id/tvAirQualityContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tvAirQualityCount"
+                android:layout_marginTop="20dp"
+                android:text="空气质量 Air quality"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:id="@+id/rlTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="140dp"
+            android:layout_marginTop="180dp">
+
+        <ImageView
+                android:id="@+id/ivTempIcon"
+                android:layout_width="20dp"
+                android:layout_height="28dp"
+                android:src="@mipmap/icon_current_room" />
+
+        <TextView
+                android:id="@+id/tvTempContent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="36dp"
+                android:layout_toRightOf="@id/ivTempIcon"
+                android:text="室内当前温度/Temperature"
+                android:textColor="#ffffffff"
+                android:textSize="24sp" />
+
+        <ImageView
+                android:id="@+id/ivTemp"
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:layout_below="@id/tvTempContent"
+                android:layout_marginLeft="100dp"
+                android:layout_marginTop="30dp"
+                android:src="@mipmap/icon_temperature_indoor" />
+
+        <TextView
+                android:id="@+id/tvTempCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ivTemp"
+                android:layout_marginLeft="90dp"
+                android:layout_marginTop="20dp"
+                android:textColor="#FFFFFF"
+                android:textSize="44sp" />
+
+        <TextView
+                android:id="@+id/tvTempUnit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/tvTempCount"
+                android:layout_toRightOf="@id/tvTempCount"
+                android:text="℃"
+                android:textColor="#FFFFFF"
+                android:textSize="30sp" />
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvTempUnit"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="40dp"
+                android:src="@mipmap/ico_line_home" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:id="@+id/rlSetting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="140dp"
+            android:layout_marginBottom="100dp">
+
+        <ImageView
+                android:id="@+id/ivSetting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:src="@mipmap/btn_setting" />
+
+        <TextView
+                android:id="@+id/tvSetting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ivSetting"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="设置"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+            android:id="@+id/rlRepair"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="80dp"
+            android:layout_marginBottom="100dp"
+            android:layout_toRightOf="@id/rlSetting">
+
+        <ImageView
+                android:id="@+id/ivRepair"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:src="@mipmap/icon_repare" />
+
+        <TextView
+                android:id="@+id/tvRepair"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ivRepair"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="报修"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp" />
+    </RelativeLayout>
+</RelativeLayout>

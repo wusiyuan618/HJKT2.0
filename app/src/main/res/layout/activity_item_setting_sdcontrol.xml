@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent" android:layout_height="wrap_content">
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="3.湿度控制"
+                android:textColor="#ffffffff"
+                android:textSize="24sp" />
+        <LinearLayout
+                android:id="@+id/llSDNoAuto"
+                android:layout_toLeftOf="@id/llSDAuto"
+                android:gravity="center_vertical"
+                android:layout_marginRight="70dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <ImageView
+                    android:id="@+id/ivSDNoAuto"
+                    android:src="@mipmap/btn_normal"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            <TextView
+                    android:id="@+id/tvSDNoAuto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="手动"
+                    android:textColor="#ff666666"
+                    android:textSize="24sp"
+                    />
+        </LinearLayout>
+        <LinearLayout
+                android:id="@+id/llSDAuto"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <ImageView
+                    android:id="@+id/ivSDAuto"
+                    android:src="@mipmap/btn_choose"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            <TextView
+                    android:id="@+id/tvSDAuto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="自动"
+                    android:textColor="#ffffff"
+                    android:textSize="24sp"
+                    />
+        </LinearLayout>
+    </RelativeLayout>
+    <LinearLayout
+            android:id="@+id/llSDItemAuto"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RelativeLayout
+                android:layout_marginLeft="30dp"
+                android:id="@+id/rlJS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="加湿min"
+                    android:textColor="#ffffffff"
+                    android:textSize="24sp" />
+
+
+            <ImageView
+                    android:id="@+id/ivJS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/btn_drop_down" />
+
+            <TextView
+                    android:id="@+id/tvJS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="30dp"
+                    android:layout_toLeftOf="@id/ivJS"
+                    android:textColor="#ffffffff"
+                    android:textSize="24sp" />
+        </RelativeLayout>
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="40dp"
+                android:background="@color/divingColor" />
+        <RelativeLayout
+                android:layout_marginLeft="30dp"
+                android:id="@+id/rlCS"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="除湿max"
+                    android:textColor="#ffffffff"
+                    android:textSize="24sp" />
+
+
+            <ImageView
+                    android:id="@+id/ivCS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/btn_drop_down" />
+
+            <TextView
+                    android:id="@+id/tvCS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="30dp"
+                    android:layout_toLeftOf="@id/ivCS"
+                    android:textColor="#ffffffff"
+                    android:textSize="24sp" />
+        </RelativeLayout>
+    </LinearLayout>
+    <RelativeLayout
+            android:visibility="gone"
+            android:layout_marginTop="40dp"
+            android:id="@+id/rlSDItemNoAuto"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+                android:layout_marginLeft="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="手动设置"
+                android:textColor="#ffffffff"
+                android:textSize="24sp" />
+        <LinearLayout
+                android:id="@+id/llSDNoAutoOff"
+                android:layout_toLeftOf="@id/llSDNoAutoCS"
+                android:gravity="center_vertical"
+                android:layout_marginRight="70dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+            <ImageView
+                    android:id="@+id/ivSDNoAutoOff"
+                    android:src="@mipmap/btn_choose"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            <TextView
+                    android:id="@+id/tvSDNoAutoOff"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="关"
+                    android:textColor="#ffffff"
+                    android:textSize="24sp"
+                    />
+        </LinearLayout>
+        <LinearLayout
+                android:id="@+id/llSDNoAutoCS"
+                android:layout_toLeftOf="@id/llSDAutoJS"
+                android:gravity="center_vertical"
+                android:layout_marginRight="70dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+            <ImageView
+                    android:id="@+id/ivSDNoAutoCS"
+                    android:src="@mipmap/btn_normal"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            <TextView
+                    android:id="@+id/tvSDNoAutoCS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="除湿"
+                    android:textColor="#ff666666"
+                    android:textSize="24sp"
+                    />
+        </LinearLayout>
+        <LinearLayout
+                android:id="@+id/llSDAutoJS"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+            <ImageView
+                    android:id="@+id/ivSDAutoJS"
+                    android:src="@mipmap/btn_normal"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            <TextView
+                    android:id="@+id/tvSDAutoJS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="加湿"
+                    android:textColor="#ff666666"
+                    android:textSize="24sp"
+                    />
+        </LinearLayout>
+
+    </RelativeLayout>
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="40dp"
+            android:background="@color/divingColor" />
+</LinearLayout>

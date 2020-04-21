@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent" android:layout_height="wrap_content">
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="5.风机模式"
+                android:textColor="#ffffffff"
+                android:textSize="24sp" />
+
+        <LinearLayout
+                android:id="@+id/llFJAuto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="70dp"
+                android:layout_toLeftOf="@id/llFJOpen"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+            <ImageView
+                    android:id="@+id/ivFJAuto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:src="@mipmap/btn_choose" />
+
+            <TextView
+                    android:id="@+id/tvFJAuto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="自动"
+                    android:textColor="#ffffff"
+                    android:textSize="24sp" />
+        </LinearLayout>
+        <LinearLayout
+                android:id="@+id/llFJOpen"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+            <ImageView
+                    android:id="@+id/ivFJOpen"
+                    android:src="@mipmap/btn_normal"
+                    android:layout_marginRight="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            <TextView
+                    android:id="@+id/tvFJOpen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="常开"
+                    android:textColor="#ff666666"
+                    android:textSize="24sp"
+                    />
+        </LinearLayout>
+    </RelativeLayout>
+    <RelativeLayout
+            android:id="@+id/rlTFSJ"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="30dp"
+                android:text="自动"
+                android:textColor="#ffffffff"
+                android:textSize="24sp" />
+
+        <ImageView
+                android:id="@+id/ivTFSJ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/btn_drop_down" />
+
+        <TextView
+                android:id="@+id/tvTFSJ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="30dp"
+                android:layout_toLeftOf="@id/ivTFSJ"
+                android:text="15分钟"
+                android:textColor="#ffffffff"
+                android:textSize="24sp" />
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="60dp"
+                android:layout_toLeftOf="@id/tvTFSJ"
+                android:text="每小时运行"
+                android:textColor="#ffffffff"
+                android:textSize="24sp" />
+    </RelativeLayout>
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="40dp"
+            android:background="@color/divingColor" />
+</LinearLayout>

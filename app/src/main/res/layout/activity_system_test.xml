@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        android:orientation="horizontal"
+        android:background="@mipmap/bg"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="match_parent">
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+        <ImageView
+                android:id="@+id/ivBack"
+                android:layout_marginTop="72dp"
+                android:layout_marginLeft="92dp"
+                android:src="@mipmap/btn_return"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+        <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            <ImageView
+                    android:layout_width="840dp"
+                    android:layout_height="520dp"
+                    android:layout_marginTop="160dp"
+                    android:src="@mipmap/bg_jidianqi" />
+            <LinearLayout
+                    android:layout_marginTop="190dp"
+                    android:layout_marginLeft="130dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_width="579dp"
+                    android:layout_height="28dp">
+                <ImageView
+                        android:id="@+id/ivOut1"
+                        android:src="@mipmap/icon_light_close"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                <ImageView
+                        android:id="@+id/ivOut2"
+                        android:src="@mipmap/icon_light_close"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                <ImageView
+                        android:id="@+id/ivOut3"
+                        android:src="@mipmap/icon_light_close"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                <ImageView
+                        android:id="@+id/ivOut4"
+
+                        android:src="@mipmap/icon_light_close"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                <ImageView
+                        android:id="@+id/ivOut5"
+
+                        android:src="@mipmap/icon_light_close"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                <ImageView
+                        android:id="@+id/ivOut6"
+
+                        android:src="@mipmap/icon_light_close"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                <ImageView
+                        android:id="@+id/ivOut7"
+
+                        android:src="@mipmap/icon_light_close"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                <ImageView
+                        android:id="@+id/ivOut8"
+                        android:src="@mipmap/icon_light_close"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                <ImageView
+                        android:id="@+id/ivOut9"
+                        android:src="@mipmap/icon_light_close"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                <ImageView
+                        android:id="@+id/ivOut10"
+                        android:src="@mipmap/icon_light_close"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_marginTop="620dp"
+                    android:layout_marginLeft="130dp"
+                    android:gravity="center_vertical"
+                    android:layout_width="579dp"
+                    android:layout_height="28dp">
+                <LinearLayout
+                        android:layout_weight="4"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"/>
+                <ImageView
+                        android:id="@+id/ivOut16"
+
+                        android:src="@mipmap/icon_light_close"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                <ImageView
+                        android:id="@+id/ivOut15"
+
+                        android:src="@mipmap/icon_light_close"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                <ImageView
+                        android:id="@+id/ivOut14"
+
+                        android:src="@mipmap/icon_light_close"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                <ImageView
+                        android:id="@+id/ivOut13"
+                        android:src="@mipmap/icon_light_close"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                <ImageView
+                        android:id="@+id/ivOut12"
+                        android:src="@mipmap/icon_light_close"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                <ImageView
+                        android:id="@+id/ivOut11"
+                        android:src="@mipmap/icon_light_close"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </RelativeLayout>
+        <LinearLayout
+                android:gravity="center"
+                android:layout_marginTop="100dp"
+                android:orientation="horizontal"
+                android:layout_width="840dp"
+                android:layout_height="wrap_content">
+            <ImageView
+                    android:id="@+id/ivEnvBtn"
+                    android:layout_margin="20dp"
+                    android:src="@mipmap/btn_environmental"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"/>
+            <ImageView
+                    android:id="@+id/ivJDQBtn"
+                    android:layout_margin="30dp"
+                    android:src="@mipmap/btn_jidianqi"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"/>
+            <ImageView
+                    android:id="@+id/ivScreenBtn"
+                    android:layout_margin="20dp"
+                    android:src="@mipmap/btn_screen"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"/>
+            <ImageView
+                    android:id="@+id/ivIsReceiveBtn"
+                    android:layout_margin="20dp"
+                    android:src="@mipmap/btn_journal_selected"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <TextView
+            android:id="@+id/tvLog"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="100dp"
+            android:layout_marginRight="50dp"
+            android:padding="10dp"
+            android:fadeScrollbars="true"
+            android:background="#353535"
+            android:textColor="#ffffff" />
+
+</LinearLayout>

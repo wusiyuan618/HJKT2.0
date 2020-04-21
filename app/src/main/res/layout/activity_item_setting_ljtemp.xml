@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent" android:layout_height="wrap_content">
+    <RelativeLayout
+            android:id="@+id/rlLJWD"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="2.离家温度"
+                android:textColor="#ffffffff"
+                android:textSize="24sp" />
+
+        <ImageView
+                android:id="@+id/ivLJWD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/icon_xiaojiantou" />
+
+    </RelativeLayout>
+    <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/llLJWDContent"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RelativeLayout
+                android:layout_marginLeft="30dp"
+                android:id="@+id/rlZLLJWD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="制冷离家温度"
+                    android:textColor="#ffffffff"
+                    android:textSize="24sp" />
+
+
+            <ImageView
+                    android:id="@+id/ivZLLJWD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/btn_drop_down" />
+
+            <TextView
+                    android:id="@+id/tvZLLJWD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="30dp"
+                    android:layout_toLeftOf="@id/ivZLLJWD"
+                    android:text="26℃"
+                    android:textColor="#ffffffff"
+                    android:textSize="24sp" />
+        </RelativeLayout>
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="40dp"
+                android:background="@color/divingColor" />
+        <RelativeLayout
+                android:layout_marginLeft="30dp"
+                android:id="@+id/rlZRLJWD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="制热离家温度"
+                    android:textColor="#ffffffff"
+                    android:textSize="24sp" />
+
+
+            <ImageView
+                    android:id="@+id/ivZRLJWD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/btn_drop_down" />
+
+            <TextView
+                    android:id="@+id/tvZRLJWD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="30dp"
+                    android:layout_toLeftOf="@id/ivZRLJWD"
+                    android:text="26℃"
+                    android:textColor="#ffffffff"
+                    android:textSize="24sp" />
+        </RelativeLayout>
+    </LinearLayout>
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="40dp"
+            android:background="@color/divingColor" />
+</LinearLayout>
