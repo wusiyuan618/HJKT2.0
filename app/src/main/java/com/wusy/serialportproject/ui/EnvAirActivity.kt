@@ -9,7 +9,11 @@ import android.graphics.Color
 import android.os.Handler
 import android.os.Message
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.orhanobut.logger.Logger
 import com.wusy.serialportproject.R
 import com.wusy.serialportproject.app.BaseTouchActivity
@@ -148,6 +152,10 @@ class EnvAirActivity : BaseTouchActivity() {
                 }
             }
         })
+        var options = RequestOptions()
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+        Glide.with(this).load(R.mipmap.aqi).apply(options).into(ivAirQualityGif)
+
         rlSetting.setOnClickListener {
             navigateTo(SettingActivity::class.java)
         }
@@ -202,22 +210,36 @@ class EnvAirActivity : BaseTouchActivity() {
                     sendBroadcast(Intent("HJL_ACTION_REBOOT"))
                 }
                 Thread.sleep(1000)
-
-                if((Constants.curED?.pM2_5?:0)<75){
-                    lastHighPMTime=0L
-                }else{
-                    if(lastHighPMTime==0L){
-                        lastHighPMTime=calendar.timeInMillis
+                var updateTime=SharedPreferencesUtil.getInstance(this).getData(Constants.VALUEADDED_UPDATE_DATE_FILTER,"").toString()
+                if(updateTime!=""){
+                    var time=SimpleDateFormat("yyyy-MM-dd").parse(updateTime).time
+                    if(time-calendar.timeInMillis>(1000L*60L*60L*24L*180L)){//提示更换
+                        runOnUiThread {
+                            ivAirQualityGif.visibility= View.VISIBLE
+                        }
                     }else{
-                        if(calendar.timeInMillis-lastHighPMTime>=6*60*1000*60){//提示更换
-
-                        }else{//不提示更换
-
+                        if((Constants.curED?.pM2_5?:0)<75){//将时间清空
+                            lastHighPMTime=0L
+                            runOnUiThread {
+                                ivAirQualityGif.visibility= View.GONE
+                            }
+                        }else{
+                            if(lastHighPMTime==0L){
+                                lastHighPMTime=calendar.timeInMillis
+                            }else{
+                                if(calendar.timeInMillis-lastHighPMTime>=6L*60L*1000L*60L){//提示更换
+                                    runOnUiThread {
+                                        ivAirQualityGif.visibility= View.VISIBLE
+                                    }
+                                }else{//不提示更换
+                                    runOnUiThread {
+                                        ivAirQualityGif.visibility= View.GONE
+                                    }
+                                }
+                            }
                         }
                     }
-
                 }
-
             }
         }).start()
         Thread(Runnable {

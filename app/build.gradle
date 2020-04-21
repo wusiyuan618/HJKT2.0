@@ -10,8 +10,8 @@ android {
         applicationId "com.wusy.serialportproject"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 8
-        versionName "1.1.8"
+        versionCode 9
+        versionName "1.1.9"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
@@ -47,5 +47,5 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.2.0'//OkHttp3
     implementation 'com.squareup.okio:okio:1.7.0'//OkHttp3
     implementation 'com.google.code.gson:gson:2.8.5'
-
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
 }

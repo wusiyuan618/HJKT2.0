@@ -106,7 +106,14 @@
                 android:text="空气质量 Air quality"
                 android:textColor="#FFFFFF"
                 android:textSize="24sp" />
-
+        <ImageView
+            android:id="@+id/ivAirQualityGif"
+            android:visibility="gone"
+            android:layout_toRightOf="@id/tvAirQualityUnit"
+            android:layout_alignTop="@id/tvAirQualityUnit"
+            android:layout_marginLeft="30dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
     </RelativeLayout>
 
     <RelativeLayout
