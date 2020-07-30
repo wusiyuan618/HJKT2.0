@@ -1234,7 +1234,7 @@ class EnvAirActivity : BaseTouchActivity() {
                 if (buffer.toString().length > 6 && buffer.toString().substring(
                         0,
                         6
-                    ) == "01032e"
+                    ) == "02032E"
                 ) {//环境探测器数据Ate24V
                     val message = Message.obtain()
                     message.what = 3

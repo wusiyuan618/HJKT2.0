@@ -1,6 +1,7 @@
 package com.wusy.serialportproject.devices
 
 import com.orhanobut.logger.Logger
+import com.wusy.serialportproject.util.DataUtils
 import java.util.ArrayList
 
 class Ate24V:BaseDevices(){
@@ -8,8 +9,7 @@ class Ate24V:BaseDevices(){
         this.name= "Ate24V"
         this.type="Env"
         this.tips="环境探测器"
-
-        this.SearchStatusCode= "01030000001705C4"
+        this.SearchStatusCode = "020300000017" + DataUtils.getCRC("020300000017")
     }
     fun parseData(allData:String):HashMap<String,Any> {
         var data = allData.substring(6)

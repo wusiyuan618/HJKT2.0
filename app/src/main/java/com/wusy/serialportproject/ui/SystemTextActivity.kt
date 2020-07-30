@@ -59,6 +59,14 @@ class SystemTextActivity:BaseActivity() {
             if(isReceiveLog) ivIsReceiveBtn.setImageResource(R.mipmap.btn_journal_normal)
             else ivIsReceiveBtn.setImageResource(R.mipmap.btn_journal_selected)
             isReceiveLog=!isReceiveLog
+//            var intent=Intent()
+//            intent.action=CommonConfig.SERIALPORTPROJECT_ACTION_SP_UI
+//            intent.putExtra("msg","02")
+//            sendBroadcast(intent)
+//            var intent2=Intent()
+//            intent2.action=CommonConfig.SERIALPORTPROJECT_ACTION_SP_UI
+//            intent2.putExtra("msg","032E000A0002000000000000000000000000000100320196000100F90034000A000A0000001E000200010005000F000151B0")
+//            sendBroadcast(intent2)
         }
 
         ivBack.setOnClickListener {

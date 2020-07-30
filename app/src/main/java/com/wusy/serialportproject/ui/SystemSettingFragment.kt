@@ -143,7 +143,7 @@ class SystemSettingFragment : BaseFragment() {
             File(Environment.getExternalStorageDirectory().toString() + "/logger/LogsByWusyLib_0.log")
         var maps = HashMap<String, String>()
         maps["type"] = "1"
-
+        Thread.sleep(1000)
         OkHttpUtil.getInstance()
             .upLoadFile(url, "file", file, maps, object : OkHttpUtil.ResultCallBack {
                 override fun failListener(call: Call?, e: IOException?, message: String?) {
@@ -158,7 +158,7 @@ class SystemSettingFragment : BaseFragment() {
                     activity!!.runOnUiThread {
                         var json = JSONObject(response!!.body()!!.string())
                         if (json.getString("status") == "0")
-                            showToast("上传成功,请联系管理员")
+                            showToast(json.getString("msg")?:"上传成功")
                         else
                             showToast("上传失败")
                         hideLoadImage()

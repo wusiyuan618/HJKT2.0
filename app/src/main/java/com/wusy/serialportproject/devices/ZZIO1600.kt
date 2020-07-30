@@ -1,6 +1,8 @@
 package com.wusy.serialportproject.devices
 
+import com.orhanobut.logger.Logger
 import com.wusy.serialportproject.util.DataUtils
+import java.lang.Exception
 
 
 class ZZIO1600:BaseDevices(){
@@ -32,18 +34,26 @@ class ZZIO1600:BaseDevices(){
         return star + address + indexStr + openStr + DataUtils.getCRC(star + address + indexStr + openStr)
     }
     fun parseStatusData(msgObj:String):ArrayList<Int>{
-        val data = msgObj.substring(6, 10)
-        var list = getStatus(data, 16)
-        //解析到的list含义前8位，代表的继电器9--16，后8位代表的继电器1--8
-        //例如[0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0]代表1/2/5/12继电器点亮
-        //这里我们从新组装数据的顺序，让1--16对应
         var listNew = ArrayList<Int>()
-        for (i in 8 until 16) {
-            listNew.add(list[i])
+        try{
+            val data = msgObj.substring(6, 10)
+            var list = getStatus(data, 16)
+            //解析到的list含义前8位，代表的继电器9--16，后8位代表的继电器1--8
+            //例如[0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0]代表1/2/5/12继电器点亮
+            //这里我们从新组装数据的顺序，让1--16对应
+            for (i in 8 until 16) {
+                listNew.add(list[i])
+            }
+            for (i in 0 until 8) {
+                listNew.add(list[i])
+            }
+        }catch (e:Exception){
+            Logger.e("寄电器数据解释发生错误")
+            for (i in 0 until 16){
+                listNew.add(0)
+            }
         }
-        for (i in 0 until 8) {
-            listNew.add(list[i])
-        }
+
         return listNew
     }
     /**

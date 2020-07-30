@@ -124,47 +124,44 @@ class ScreenActivity : BaseTouchActivity() {
         tvAQIQuality.setTextColor(Color.parseColor(map["textColor"]))
         tvAQI.text = ed.AQI.toString()
         tvAQI.setTextColor(Color.parseColor(map["color"]))
-
     }
 
     fun initOutSideData(bean: OutSideTempBean) {
-        tvOutSideHumCount.text = (bean.result?.realtime?.humidity ?: "") + "%"
-        tvOutSideTempCount.text = (bean.result?.realtime?.temperature ?: "") + " ℃"
-        tvOutSideDirectCount.text = bean.result?.realtime?.direct ?: "未知"
-        tvOutSidePowerCount.text = bean.result?.realtime?.power ?: "未知"
-        tvOutSideInfoCount.text = bean.result?.realtime?.info ?: "未知"
-        val map = getAQIIconMap((bean.result?.realtime?.aqi ?: "0").toInt())
-        tvOutSideAQIQuality.text = map["text"]
-        val mGradientDrawable = tvOutSideAQIQuality.background as GradientDrawable
-        mGradientDrawable.setColor(Color.parseColor(map["color"]))
-        tvOutSideAQIQuality.setTextColor(Color.parseColor(map["textColor"]))
-        tvOutSideAQI.text = bean.result?.realtime?.aqi ?: "0"
-        tvOutSideAQI.setTextColor(Color.parseColor(map["color"]))
+        try {
+            tvOutSideHumCount.text = (bean.result?.realtime?.humidity ?: "") + "%"
+            tvOutSideTempCount.text = (bean.result?.realtime?.temperature ?: "") + " ℃"
+            tvOutSideDirectCount.text = bean.result?.realtime?.direct ?: "未知"
+            tvOutSidePowerCount.text = bean.result?.realtime?.power ?: "未知"
+            tvOutSideInfoCount.text = bean.result?.realtime?.info ?: "未知"
+            val map = getAQIIconMap((bean.result?.realtime?.aqi ?: "0").toInt())
+            tvOutSideAQIQuality.text = map["text"]
+            val mGradientDrawable = tvOutSideAQIQuality.background as GradientDrawable
+            mGradientDrawable.setColor(Color.parseColor(map["color"]))
+            tvOutSideAQIQuality.setTextColor(Color.parseColor(map["textColor"]))
+            tvOutSideAQI.text = bean.result?.realtime?.aqi ?: "0"
+            tvOutSideAQI.setTextColor(Color.parseColor(map["color"]))
+        } catch (e: Exception) {
+            Logger.e(e, "获取外界环境数据法神错误")
+        }
     }
 
     private fun requestOutSideTemp() {
-        try{
-            OkHttpUtil.getInstance()
-                .asynGet("http://apis.juhe.cn/simpleWeather/query?city=重庆&key=3139491a0853306108f5d44194dbf17d",
-                    object : OkHttpUtil.ResultCallBack {
-                        override fun successListener(call: Call?, response: Response?) {
-                            var str = response?.body()?.string()
-                            var bean =
-                                Gson().fromJson<OutSideTempBean>(str, OutSideTempBean::class.java)
-                            runOnUiThread {
-                                initOutSideData(bean)
-                            }
-                            Thread.sleep(60 * 1000 * 60)
-                            requestOutSideTemp()
+        OkHttpUtil.getInstance()
+            .asynGet("http://apis.juhe.cn/simpleWeather/query?city=重庆&key=3139491a0853306108f5d44194dbf17d",
+                object : OkHttpUtil.ResultCallBack {
+                    override fun successListener(call: Call?, response: Response?) {
+                        var str = response?.body()?.string()
+                        var bean =
+                            Gson().fromJson<OutSideTempBean>(str, OutSideTempBean::class.java)
+                        runOnUiThread {
+                            initOutSideData(bean)
                         }
+                    }
+                    override fun failListener(call: Call?, e: IOException?, message: String?) {
+                    }
 
-                        override fun failListener(call: Call?, e: IOException?, message: String?) {
-                        }
+                })
 
-                    })
-        }catch (e:Exception){
-            Logger.e(e,"获取外界环境数据法神错误")
-        }
 
     }
 
