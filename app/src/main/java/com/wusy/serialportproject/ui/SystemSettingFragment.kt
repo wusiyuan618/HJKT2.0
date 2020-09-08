@@ -29,6 +29,8 @@ import kotlinx.android.synthetic.main.fragment_setting_system.*
 import okhttp3.Call
 import okhttp3.Response
 import org.json.JSONObject
+import java.io.DataInputStream
+import java.io.DataOutputStream
 import java.io.File
 import java.io.IOException
 import java.lang.Exception
@@ -81,11 +83,17 @@ class SystemSettingFragment : BaseFragment() {
         }
         rlExit.setOnClickListener {
             val intent = Intent()
-            intent.component = ComponentName("com.android.launcher3", "com.android.launcher3.Launcher")
+            intent.component =
+                ComponentName("com.android.launcher3", "com.android.launcher3.Launcher")
             startActivity(intent)
         }
         rlReboot.setOnClickListener {
             context?.sendBroadcast(Intent("HJL_ACTION_REBOOT"))
+//            val rb = Intent(Intent.ACTION_REBOOT)
+//            rb.putExtra("nowait", 1)
+//            rb.putExtra("interval", 1)
+//            rb.putExtra("window", 0)
+//            context?.sendBroadcast(rb)
         }
         rlSysTest.setOnClickListener {
             navigateTo(SystemTextActivity::class.java)
@@ -158,7 +166,7 @@ class SystemSettingFragment : BaseFragment() {
                     activity!!.runOnUiThread {
                         var json = JSONObject(response!!.body()!!.string())
                         if (json.getString("status") == "0")
-                            showToast(json.getString("msg")?:"上传成功")
+                            showToast(json.getString("msg") ?: "上传成功")
                         else
                             showToast("上传失败")
                         hideLoadImage()
@@ -169,7 +177,7 @@ class SystemSettingFragment : BaseFragment() {
 
     private fun initSetPhonePop() {
         setPhoneNumberEidtPopup = NumberEditPopup(context)
-        setPhoneNumberEidtPopup.tvTitle.text = "发送运行分析数据"
+        setPhoneNumberEidtPopup.tvTitle.text = "修改代理商电话"
         setPhoneNumberEidtPopup.tvContent.text = "当前代理商电话：" + DataUtils.formatPhoneNumber(
             SharedPreferencesUtil.getInstance(context).getData(
                 Constants.DEFAULT_DLS_PHONE,

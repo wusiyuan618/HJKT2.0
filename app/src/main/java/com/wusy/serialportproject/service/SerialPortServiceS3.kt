@@ -9,6 +9,7 @@ import android.content.IntentFilter
 import android.os.Handler
 import android.os.IBinder
 import android.os.Message
+import android.util.Log
 import com.orhanobut.logger.Logger
 import com.wusy.serialportproject.util.CommonConfig
 import com.wusy.serialportproject.util.SerialPortUtil
@@ -77,8 +78,14 @@ class SerialPortServiceS3: Service(){
             if(intent!!.action== CommonConfig.SERIALPORTPROJECT_ACTION_SP_SERVICE){
                 when(intent.getStringExtra("data")){
                     "send"->{
+//                        Thread.sleep(50)
+//                        SerialPortUtil.switchUartde(1,SerialPortUtil.TTYS3_STAUS_FILEPATH)
+//                        Log.i("wsy","改变了收发状态，当前为----发送状态")
                         var msg=intent.getStringExtra("msg")
                         serialPortUtilS2.sendSerialPort(msg)
+//                        Thread.sleep(10)
+//                        SerialPortUtil.switchUartde(0,SerialPortUtil.TTYS3_STAUS_FILEPATH)
+//                        Log.i("wsy","改变了收发状态，当前为----接收状态")
                     }
                 }
             }

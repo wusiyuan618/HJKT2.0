@@ -78,8 +78,10 @@ class SerialPortService : Service(){
            if(intent!!.action==CommonConfig.SERIALPORTPROJECT_ACTION_SP_SERVICE){
                 when(intent.getStringExtra("data")){
                     "send"->{
+//                        SerialPortUtil.switchUartde(1,SerialPortUtil.TTYS2_STAUS_FILEPATH)
                         var msg=intent.getStringExtra("msg")
                         serialPortUtilS2.sendSerialPort(msg)
+//                        SerialPortUtil.switchUartde(0,SerialPortUtil.TTYS2_STAUS_FILEPATH)
                     }
                 }
            }

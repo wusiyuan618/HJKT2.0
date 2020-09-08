@@ -34,7 +34,6 @@
         <activity android:name=".ui.test.TopActivity"/>
         <activity android:name=".ui.test.BottomActivity"/>
         <activity android:name=".ui.SettingActivity"/>
-        <activity android:name=".ui.RepairActivity"/>
         <activity android:name=".ui.screen.ScreenClockActivity"/>
         <activity android:name=".ui.screen.ScreenActivity"/>
         <activity android:name=".ui.screen.ScreenNumberClockActivity"/>

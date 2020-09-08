@@ -8,18 +8,18 @@
               tools:ignore="MissingDefaultResource">
     <TextView
             android:text="输入密码"
-            android:textSize="30dp"
+            android:textSize="30sp"
             android:textColor="#ffffff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     <com.wusy.wusylibrary.view.PwdIndicator
             android:id="@+id/pwdindicator"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="30dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     <com.wusy.wusylibrary.view.NumberKeyBoxView
             android:id="@+id/numberkeyboxview"
-            android:layout_marginTop="60px"
+            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="500dp"/>
 </LinearLayout>

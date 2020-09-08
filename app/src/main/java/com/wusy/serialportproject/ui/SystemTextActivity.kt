@@ -6,6 +6,7 @@ import android.content.Intent
 import android.text.method.ScrollingMovementMethod
 import android.widget.ImageView
 import com.wusy.serialportproject.R
+import com.wusy.serialportproject.app.BaseTouchActivity
 import com.wusy.serialportproject.ui.screen.ScreenActivity
 import com.wusy.serialportproject.util.CommonConfig
 import com.wusy.wusylibrary.base.BaseActivity
@@ -14,7 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SystemTextActivity:BaseActivity() {
+class SystemTextActivity: BaseTouchActivity() {
     var imageViewList = ArrayList<ImageView>()
     var isReceiveLog=true
     override fun findView() {

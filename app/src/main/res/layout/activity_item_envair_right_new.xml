@@ -13,20 +13,20 @@
 
         <ImageView
                 android:id="@+id/ivClod"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="@dimen/ivClod_wid"
+                android:layout_height="@dimen/ivClod_wid"
                 android:src="@mipmap/icon_cool_normal" />
         <ImageView
                 android:id="@+id/ivHeat"
                 android:layout_marginTop="30dp"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="@dimen/ivClod_wid"
+                android:layout_height="@dimen/ivClod_wid"
                 android:src="@mipmap/icon_heat_normal" />
         <ImageView
                 android:id="@+id/ivXF"
                 android:layout_marginTop="30dp"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="@dimen/ivClod_wid"
+                android:layout_height="@dimen/ivClod_wid"
                 android:src="@mipmap/icon_fresh_normal" />
     </LinearLayout>
 

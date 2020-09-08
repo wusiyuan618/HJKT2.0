@@ -7,7 +7,7 @@
         android:orientation="horizontal">
 
 
-    <include layout="@layout/activity_item_envair_left"/>
+    <include layout="@layout/activity_item_envair_left" />
 
     <include layout="@layout/activity_item_envair_center"/>
 

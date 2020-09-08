@@ -1,204 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        android:orientation="horizontal"
-        android:background="@mipmap/bg"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg"
+    android:orientation="horizontal">
+
     <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
         <ImageView
-                android:id="@+id/ivBack"
-                android:layout_marginTop="72dp"
-                android:layout_marginLeft="92dp"
-                android:src="@mipmap/btn_return"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            android:id="@+id/ivBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/ivBack_marginLeft"
+            android:layout_marginTop="@dimen/ivBack_marginTop"
+            android:src="@mipmap/btn_return" />
     </LinearLayout>
 
     <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:orientation="vertical">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:orientation="vertical">
 
         <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
             <ImageView
-                    android:layout_width="840dp"
-                    android:layout_height="520dp"
-                    android:layout_marginTop="160dp"
-                    android:src="@mipmap/bg_jidianqi" />
+                android:layout_width="@dimen/bg_jidianqi_wid"
+                android:layout_height="@dimen/bg_jidianqi_hei"
+                android:layout_marginTop="@dimen/bg_jidianqi_marginTop"
+                android:src="@mipmap/bg_jidianqi" />
+
             <LinearLayout
-                    android:layout_marginTop="190dp"
-                    android:layout_marginLeft="130dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_width="579dp"
-                    android:layout_height="28dp">
-                <ImageView
-                        android:id="@+id/ivOut1"
-                        android:src="@mipmap/icon_light_close"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
-                <ImageView
-                        android:id="@+id/ivOut2"
-                        android:src="@mipmap/icon_light_close"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
-                <ImageView
-                        android:id="@+id/ivOut3"
-                        android:src="@mipmap/icon_light_close"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
-                <ImageView
-                        android:id="@+id/ivOut4"
+                android:layout_width="@dimen/bg_jidianqi_top_swich_wid"
+                android:layout_height="@dimen/bg_jidianqi_top_swich_hei"
+                android:layout_marginLeft="@dimen/bg_jidianqi_top_swich_marginLeft"
+                android:layout_marginTop="@dimen/bg_jidianqi_top_swich_marginTop"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                        android:src="@mipmap/icon_light_close"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
                 <ImageView
-                        android:id="@+id/ivOut5"
+                    android:id="@+id/ivOut1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_light_close" />
 
-                        android:src="@mipmap/icon_light_close"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
                 <ImageView
-                        android:id="@+id/ivOut6"
+                    android:id="@+id/ivOut2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_light_close" />
 
-                        android:src="@mipmap/icon_light_close"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
                 <ImageView
-                        android:id="@+id/ivOut7"
+                    android:id="@+id/ivOut3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_light_close" />
 
-                        android:src="@mipmap/icon_light_close"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
                 <ImageView
-                        android:id="@+id/ivOut8"
-                        android:src="@mipmap/icon_light_close"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
+                    android:id="@+id/ivOut4"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_light_close" />
+
                 <ImageView
-                        android:id="@+id/ivOut9"
-                        android:src="@mipmap/icon_light_close"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
+                    android:id="@+id/ivOut5"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_light_close" />
+
                 <ImageView
-                        android:id="@+id/ivOut10"
-                        android:src="@mipmap/icon_light_close"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
+                    android:id="@+id/ivOut6"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_light_close" />
+
+                <ImageView
+                    android:id="@+id/ivOut7"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_light_close" />
+
+                <ImageView
+                    android:id="@+id/ivOut8"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_light_close" />
+
+                <ImageView
+                    android:id="@+id/ivOut9"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_light_close" />
+
+                <ImageView
+                    android:id="@+id/ivOut10"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_light_close" />
             </LinearLayout>
+
             <LinearLayout
-                    android:layout_marginTop="620dp"
-                    android:layout_marginLeft="130dp"
-                    android:gravity="center_vertical"
-                    android:layout_width="579dp"
-                    android:layout_height="28dp">
+                android:layout_width="@dimen/bg_jidianqi_top_swich_wid"
+                android:layout_height="@dimen/bg_jidianqi_top_swich_hei"
+                android:layout_marginLeft="@dimen/bg_jidianqi_top_swich_marginLeft"
+                android:layout_marginTop="@dimen/bg_jidianqi_bottom_swich_marginTop"
+                android:gravity="center_vertical">
+
                 <LinearLayout
-                        android:layout_weight="4"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"/>
-                <ImageView
-                        android:id="@+id/ivOut16"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4" />
 
-                        android:src="@mipmap/icon_light_close"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
                 <ImageView
-                        android:id="@+id/ivOut15"
+                    android:id="@+id/ivOut16"
 
-                        android:src="@mipmap/icon_light_close"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
-                <ImageView
-                        android:id="@+id/ivOut14"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_light_close" />
 
-                        android:src="@mipmap/icon_light_close"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
                 <ImageView
-                        android:id="@+id/ivOut13"
-                        android:src="@mipmap/icon_light_close"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
+                    android:id="@+id/ivOut15"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_light_close" />
+
                 <ImageView
-                        android:id="@+id/ivOut12"
-                        android:src="@mipmap/icon_light_close"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
+                    android:id="@+id/ivOut14"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_light_close" />
+
                 <ImageView
-                        android:id="@+id/ivOut11"
-                        android:src="@mipmap/icon_light_close"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"/>
+                    android:id="@+id/ivOut13"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_light_close" />
+
+                <ImageView
+                    android:id="@+id/ivOut12"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_light_close" />
+
+                <ImageView
+                    android:id="@+id/ivOut11"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/icon_light_close" />
             </LinearLayout>
         </RelativeLayout>
+
         <LinearLayout
-                android:gravity="center"
-                android:layout_marginTop="100dp"
-                android:orientation="horizontal"
-                android:layout_width="840dp"
-                android:layout_height="wrap_content">
+            android:layout_width="@dimen/lytest_wid"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/lytest_marginTop"
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <ImageView
-                    android:id="@+id/ivEnvBtn"
-                    android:layout_margin="20dp"
-                    android:src="@mipmap/btn_environmental"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"/>
+                android:id="@+id/ivEnvBtn"
+                android:layout_width="@dimen/ivClod_wid"
+                android:layout_height="@dimen/ivClod_wid"
+                android:layout_margin="@dimen/ivEnvBtn_margin"
+                android:src="@mipmap/btn_environmental" />
+
             <ImageView
-                    android:id="@+id/ivJDQBtn"
-                    android:layout_margin="30dp"
-                    android:src="@mipmap/btn_jidianqi"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"/>
+                android:id="@+id/ivJDQBtn"
+                android:layout_width="@dimen/ivClod_wid"
+                android:layout_height="@dimen/ivClod_wid"
+                android:layout_margin="@dimen/ivEnvBtn_margin"
+                android:src="@mipmap/btn_jidianqi" />
+
             <ImageView
-                    android:id="@+id/ivScreenBtn"
-                    android:layout_margin="20dp"
-                    android:src="@mipmap/btn_screen"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"/>
+                android:id="@+id/ivScreenBtn"
+                android:layout_width="@dimen/ivClod_wid"
+                android:layout_height="@dimen/ivClod_wid"
+                android:layout_margin="@dimen/ivEnvBtn_margin"
+                android:src="@mipmap/btn_screen" />
+
             <ImageView
-                    android:id="@+id/ivIsReceiveBtn"
-                    android:layout_margin="20dp"
-                    android:src="@mipmap/btn_journal_selected"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp"/>
+                android:id="@+id/ivIsReceiveBtn"
+                android:layout_width="@dimen/ivClod_wid"
+                android:layout_height="@dimen/ivClod_wid"
+                android:layout_margin="@dimen/ivEnvBtn_margin"
+                android:src="@mipmap/btn_journal_selected" />
         </LinearLayout>
 
     </LinearLayout>
 
     <TextView
-            android:id="@+id/tvLog"
-            android:layout_weight="2"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="100dp"
-            android:layout_marginBottom="100dp"
-            android:layout_marginRight="50dp"
-            android:padding="10dp"
-            android:fadeScrollbars="true"
-            android:background="#353535"
-            android:textColor="#ffffff" />
+        android:id="@+id/tvLog"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="100dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="100dp"
+        android:layout_weight="2"
+        android:background="#353535"
+        android:fadeScrollbars="true"
+        android:padding="10dp"
+        android:textColor="#ffffff" />
 
 </LinearLayout>

@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"/>
     <TextView
             android:id="@+id/tvContent"
-            android:layout_marginTop="42dp"
+            android:layout_marginTop="@dimen/tvContent_marginTop"
             android:text="当前代理商电话：187-5656-8778"
             android:textSize="24sp"
             android:textColor="#FFFFFF"
@@ -26,14 +26,14 @@
             android:textSize="24sp"
             android:background="@drawable/border"
             android:gravity="center"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="@dimen/tvEditContent_marginTop"
             android:textColor="#FFFFFF"
             android:layout_width="match_parent"
-            android:layout_height="62dp"/>
+            android:layout_height="@dimen/tvEditContent_hei"/>
 
     <com.wusy.wusylibrary.view.NumberKeyBoxView
             android:id="@+id/numberkeyboxview"
-            android:layout_marginTop="60px"
+            android:layout_marginTop="@dimen/numberkeyboxview_marginTop"
             android:layout_width="match_parent"
-            android:layout_height="500dp"/>
+            android:layout_height="@dimen/numberkeyboxview_hei"/>
 </LinearLayout>

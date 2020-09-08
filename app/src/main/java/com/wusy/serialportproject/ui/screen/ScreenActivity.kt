@@ -41,6 +41,8 @@ class ScreenActivity : BaseTouchActivity() {
     override fun init() {
         Logger.i("屏保启动")
         Constants.isOpenScreen = true
+
+        layout_total.setBackgroundColor(Color.BLACK)
         layout_total.setOnClickListener {
             finish()
         }

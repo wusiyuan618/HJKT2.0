@@ -47,10 +47,10 @@ class SettingActivity: BaseTouchActivity(){
             ft.add(R.id.fragmentBox,this.fragment as FreshSettingFragment,"FreshSettingFragment")
         })
         list.add(SettingBean().apply {
-            this.title="增值服务"
+            this.title="维保"
             this.isSelect=false
-            this.fragment=ValueAddedFragment()
-            ft.add(R.id.fragmentBox,this.fragment as ValueAddedFragment,"ValueAddedFragment")
+            this.fragment=RepairFragment()
+            ft.add(R.id.fragmentBox,this.fragment as RepairFragment,"RepairFragment")
         })
         list.add(SettingBean().apply {
             this.title="系统设置"

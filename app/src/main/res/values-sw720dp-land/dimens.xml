@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--activity_envair.xml-->
+    <dimen name="rlHumidity_marginLeft">60dp</dimen>
+    <dimen name="rlTemp_marginTop">110dp</dimen>
+    <dimen name="tvDate_marginTop">26dp</dimen>
+    <dimen name="tvDate_marginLeft">36dp</dimen>
+    <dimen name="rlHumidity_marginTop">20dp</dimen>
+    <dimen name="tvHumidityCount_marginLeft">18dp</dimen>
+    <dimen name="rlSetting_marginBottom">40dp</dimen>
+    <dimen name="tvSetting_marginTop">10dp</dimen>
+    <dimen name="tempControlView_wid">450dp</dimen>
+    <dimen name="rlTempView_wid">450dp</dimen>
+    <dimen name="roomName_marginTop">40dp</dimen>
+    <dimen name="rlTempView_marginTop">5dp</dimen>
+    <dimen name="ivClod_wid">120dp</dimen>
+    <dimen name="tvTempUnit_marginLeft">20dp</dimen>
+
+    <dimen name="ivTemp_marginLeft">80dp</dimen>
+    <dimen name="tvTempCount_marginLeft">70dp</dimen>
+
+    <!--ivBack-->
+    <dimen name="ivBack_marginTop">40dp</dimen>
+    <dimen name="ivBack_marginLeft">20dp</dimen>
+
+    <!--activity_system_test.xml-->
+
+    <dimen name="bg_jidianqi_wid">630dp</dimen>
+    <dimen name="bg_jidianqi_hei">390dp</dimen>
+    <dimen name="bg_jidianqi_marginTop">90dp</dimen>
+
+    <dimen name="bg_jidianqi_top_swich_marginTop">114dp</dimen>
+    <dimen name="bg_jidianqi_top_swich_marginLeft">98dp</dimen>
+    <dimen name="bg_jidianqi_top_swich_wid">430dp</dimen>
+    <dimen name="bg_jidianqi_top_swich_hei">22dp</dimen>
+
+    <dimen name="bg_jidianqi_bottom_swich_marginTop">435dp</dimen>
+    <dimen name="ivEnvBtn_margin">10dp</dimen>
+    <dimen name="lytest_marginTop">60dp</dimen>
+    <dimen name="lytest_wid">560dp</dimen>
+
+
+    <!--fragment_setting_enr.xml-->
+    <dimen name="fragment_setting_enr_margin">80dp</dimen>
+
+    <!--dialog_numberedit.xml-->
+    <dimen name="tvContent_marginTop">22dp</dimen>
+    <dimen name="tvEditContent_marginTop">20dp</dimen>
+    <dimen name="tvEditContent_hei">42dp</dimen>
+    <dimen name="numberkeyboxview_marginTop">30dp</dimen>
+    <dimen name="numberkeyboxview_hei">450dp</dimen>
+
+    <!--fragment_setting_enr.xml-->
+    <dimen name="tvTitle_marginTop">80dp</dimen>
+    <!--fragment_setting_system.xml-->
+    <dimen name="llFirst_marginTop">40dp</dimen>
+
+</resources>

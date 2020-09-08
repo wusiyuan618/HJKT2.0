@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="rlHumidity_marginLeft">140dp</dimen>
+    <dimen name="rlTemp_marginTop">180dp</dimen>
+    <dimen name="tvDate_marginTop">30dp</dimen>
+    <dimen name="tvDate_marginLeft">82dp</dimen>
+    <dimen name="rlHumidity_marginTop">40dp</dimen>
+    <dimen name="tvHumidityCount_marginLeft">36dp</dimen>
+    <dimen name="rlSetting_marginBottom">100dp</dimen>
+    <dimen name="tvSetting_marginTop">20dp</dimen>
+    <dimen name="tempControlView_wid">500dp</dimen>
+    <dimen name="rlTempView_wid">600dp</dimen>
+    <dimen name="roomName_marginTop">84dp</dimen>
+    <dimen name="rlTempView_marginTop">50dp</dimen>
+    <dimen name="ivClod_wid">150dp</dimen>
+    <dimen name="ivTemp_marginLeft">100dp</dimen>
+    <dimen name="tvTempCount_marginLeft">90dp</dimen>
+    <dimen name="tvTempUnit_marginLeft">50dp</dimen>
+
+    <dimen name="ivBack_marginTop">72dp</dimen>
+    <dimen name="ivBack_marginLeft">92dp</dimen>
+
+    <dimen name="bg_jidianqi_wid">840dp</dimen>
+    <dimen name="bg_jidianqi_hei">520dp</dimen>
+    <dimen name="bg_jidianqi_marginTop">160dp</dimen>
+    <dimen name="bg_jidianqi_top_swich_marginTop">190dp</dimen>
+    <dimen name="bg_jidianqi_top_swich_marginLeft">130dp</dimen>
+
+    <dimen name="bg_jidianqi_top_swich_wid">579dp</dimen>
+    <dimen name="bg_jidianqi_top_swich_hei">28dp</dimen>
+    <dimen name="bg_jidianqi_bottom_swich_marginTop">620dp</dimen>
+    <dimen name="ivEnvBtn_margin">20dp</dimen>
+    <dimen name="lytest_marginTop">100dp</dimen>
+    <dimen name="lytest_wid">840dp</dimen>
+
+    <!--fragment_setting_enr.xml-->
+    <dimen name="fragment_setting_enr_margin">240dp</dimen>
+    <!--dialog_numberedit.xml-->
+    <dimen name="tvContent_marginTop">42dp</dimen>
+    <dimen name="tvEditContent_marginTop">30dp</dimen>
+    <dimen name="tvEditContent_hei">62dp</dimen>
+    <dimen name="numberkeyboxview_marginTop">60dp</dimen>
+    <dimen name="numberkeyboxview_hei">500dp</dimen>
+
+    <!--fragment_setting_enr.xml-->
+    <dimen name="tvTitle_marginTop">200dp</dimen>
+    <!--fragment_setting_system.xml-->
+    <dimen name="llFirst_marginTop">80dp</dimen>
+
+
+
+
+
+
+</resources>

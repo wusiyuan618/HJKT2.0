@@ -1,5 +1,6 @@
 package com.wusy.serialportproject.ui
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -23,8 +24,11 @@ import com.wusy.serialportproject.bean.EnvAirControlBean
 import com.wusy.serialportproject.devices.*
 import com.wusy.serialportproject.util.CommonConfig
 import com.wusy.serialportproject.util.JDQType
+import com.wusy.serialportproject.util.SerialPortUtil
 import com.wusy.serialportproject.view.CirqueProgressControlView
 import com.wusy.wusylibrary.util.SharedPreferencesUtil
+import com.wusy.wusylibrary.util.permissions.PermissionsManager
+import com.wusy.wusylibrary.util.permissions.PermissionsResultAction
 import kotlinx.android.synthetic.main.activity_envair.*
 import kotlinx.android.synthetic.main.activity_item_envair_left.*
 import kotlinx.android.synthetic.main.activity_item_envair_center.*
@@ -125,11 +129,39 @@ class EnvAirActivity : BaseTouchActivity() {
     }
 
     override fun init() {
+        requestPermissions()
         initView()
         initBroadCast()
         initThread()
     }
+    private fun requestPermissions() {
+        if (!//写入权限
+            PermissionsManager.getInstance().hasAllPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+            )
+        )
+            PermissionsManager.getInstance().requestPermissionsIfNecessaryForResult(this,
+                arrayOf(
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
 
+                ), object :
+                    PermissionsResultAction() {
+                    override fun onGranted() {
+                        showLogInfo("权限添加成功")
+                    }
+
+                    override fun onDenied(permission: String) {
+                        showLogError("用户拒绝添加权限---$permission")
+                    }
+                })
+    }
     @SuppressLint("SetTextI18n")
     private fun initView() {
         initAllBtn()
@@ -160,7 +192,7 @@ class EnvAirActivity : BaseTouchActivity() {
             navigateTo(SettingActivity::class.java)
         }
         rlRepair.setOnClickListener {
-            navigateTo(RepairActivity::class.java)
+
         }
         //状态重置
         restoreSwitchBtnState()
@@ -360,7 +392,7 @@ class EnvAirActivity : BaseTouchActivity() {
                     Constants.curED = enD
                     tvTempCount.text = enD.temp.toString()
                     tvHumidityCount.text = enD.humidity.toString()
-                    tvAirQualityCount.text = enD.AQI.toString()
+                    tvAirQualityCount.text = enD.pM2_5.toString()
                     sendBroadcast(Intent().apply {
                         action=CommonConfig.ACTION_SYSTEMTEST_LOG
                         putExtra("log","EmvAorActivity发送串口数据=${currentEnv.log}")
@@ -399,7 +431,10 @@ class EnvAirActivity : BaseTouchActivity() {
                     var praseList = (currentJDQ as ZZIO1600).parseStatusData(msg.obj.toString())
                     sendBroadcast(Intent().apply {
                         action=CommonConfig.ACTION_SYSTEMTEST_LOG
-                        putExtra("log","解析的ZZ-IO1600寄电器状态的数据=${praseList}")
+                        putExtra("log","解析的ZZ-IO1600寄电器状态的数据=${praseList}\n" +
+                                "从0计数（寄电器从1计数）\n制冷=${MODE_Cryogen}\t制热=${MODE_Heating}\n" +
+                                "除湿=${MODE_Dehumidification}\t加湿=${MODE_Humidification}\t新风=${MODE_Hairdryer}\n" +
+                                "风阀大=${MODE_Wind_Max}\t风阀中=${MODE_Wind_Mid}\t风阀小=${MODE_Wind_Min}\t风阀关=${MODE_Wind_Off}")
                     })
                     sendBroadcast(Intent().apply {
                         action=CommonConfig.ACTION_SYSTEMTEST_JDQ
@@ -817,12 +852,8 @@ class EnvAirActivity : BaseTouchActivity() {
 //            buffer.delete(0, buffer.length)//定时更新下数据存储器，防止出现骚问题
 //            sendSerial(currentEnv.SearchStatusCode)
             if(SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_SWITCH,1)==0){
-                //执行关闭
-                ivON.setImageResource(R.mipmap.btn_close)
                 clickOFF()
             }else{
-                //执行打开
-                ivON.setImageResource(R.mipmap.btn_open)
                 clickON()
             }
         }
@@ -866,47 +897,6 @@ class EnvAirActivity : BaseTouchActivity() {
             this.switchIndex = MODE_Wind_Off
             this.content = "风力"
         }
-        /**
-         * 新风开启按钮
-         */
-//        llXFON.setOnClickListener {
-//            if (!isCanClickByOpen()) return@setOnClickListener
-//            if (!isCanClick()) return@setOnClickListener
-//            if (SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_LN, 0) != 0 ||
-//                SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_SD, 0) != 0
-//            ) {
-//                showToast("冷暖与湿度调节都关闭时，才可以使用")
-//                return@setOnClickListener
-//            }
-//            XFON()
-//        }
-        /**
-         * 新风关闭按钮
-         */
-//        llXFOFF.setOnClickListener {
-//            Logger.i("正在关闭新风功能")
-//            if (SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_LN, 0) != 0 ||
-//                SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_SD, 0) != 0
-//            ) {
-//                showToast("冷暖与湿度调节都关闭时，才可以使用")
-//                return@setOnClickListener
-//            }
-//            XFAllOff()
-//        }
-        /**
-         * 新风定时按钮
-         */
-//        llTime.setOnClickListener {
-//            if (!isCanClickByOpen()) return@setOnClickListener
-//            if (!isCanClick()) return@setOnClickListener
-//            if (SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_LN, 0) != 0 ||
-//                SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_SD, 0) != 0
-//            ) {
-//                showToast("冷暖与湿度调节都关闭时，才可以使用")
-//                return@setOnClickListener
-//            }
-//            XFTime()
-//        }
     }
 
     private fun clickON() {

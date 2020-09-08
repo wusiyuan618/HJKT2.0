@@ -2,10 +2,13 @@ package com.wusy.serialportproject.util;
 
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
+
 import com.orhanobut.logger.Logger;
 import com.wits.serialport.SerialPort;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -25,11 +28,12 @@ public class SerialPortUtil {
     private boolean isStart = false;
     private Handler handler = null;
 
+
     public SerialPortUtil(Handler handler) {
         this.handler = handler;
     }
-    private final String PATH = "/dev/ttyS2";
-    private final int BAUDRATE = 9600;
+//    private final String PATH = "/dev/ttyS2";
+//    private final int BAUDRATE = 9600;
 
     /**
      * 打开串口，接收数据
@@ -115,6 +119,32 @@ public class SerialPortUtil {
                     Logger.e( e,"ReceiveThread");
                 }
             }
+        }
+    }
+
+    /**
+     * 切换收发状态，默认是0
+     * 0=收
+     * 1=发
+     * 新屏，内口（靠电源）对应的ttyS3,对应文件w485switchctl   外口对应ttyS2,对应文件
+     * @param source
+     */
+    public static String TTYS3_STAUS_FILEPATH="w485switchctl";
+    public static String TTYS2_STAUS_FILEPATH="switchctl";
+
+    public static void switchUartde(int source,String filePath) {
+        FileWriter fileWriter = null;
+        File file = new File("/sys/devices/platform/twi.0/i2c-0/0-001a/ac100-codec/ac100_debug/"+filePath);
+        if (!file.exists()) {
+            Log.e("wsy", "uartde_CTRL_PATH is not exists!");
+            return;
+        }
+        try {
+            fileWriter = new FileWriter(file);
+            fileWriter.write(source + "");
+            fileWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
