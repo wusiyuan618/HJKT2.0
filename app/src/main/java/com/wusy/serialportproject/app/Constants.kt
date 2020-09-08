@@ -44,7 +44,6 @@ class Constants {
         //0=开 1=关
         const val BTN_STATE_COLD="btn_state_cold"
         const val BTN_STATE_HEAT="btn_state_heat"
-        const val BTN_STATE_XF="btn_state_xf"
 
         const val BTN_STATE_SD="btn_state_sd"
         /**

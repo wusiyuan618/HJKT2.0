@@ -49,12 +49,18 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:orientation="vertical">
-
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="270dp"
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:text="右屏显示"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp" />
         <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:scaleType="fitXY"
-
                 android:src="@mipmap/ico_line_home" />
 
         <TextView
@@ -62,7 +68,7 @@
                 android:layout_width="270dp"
                 android:layout_height="100dp"
                 android:gravity="center"
-                android:text="空气质量"
+                android:text="室外空气品质"
                 android:textColor="#FFFFFF"
                 android:textSize="24sp" />
 

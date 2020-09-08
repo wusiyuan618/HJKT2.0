@@ -599,7 +599,7 @@ class FreshSettingFragment : BaseFragment() {
 
     fun initTime(): ArrayList<String> {
         var list = ArrayList<String>()
-        for (i in 1..59) {
+        for (i in 15..59) {
             list.add("${i}分钟")
         }
         return list

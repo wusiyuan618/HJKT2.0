@@ -22,6 +22,7 @@ import com.wusy.serialportproject.app.Constants
 import com.wusy.serialportproject.bean.EnvironmentalDetector
 import com.wusy.serialportproject.bean.EnvAirControlBean
 import com.wusy.serialportproject.devices.*
+import com.wusy.serialportproject.ui.screen.ScreenActivity
 import com.wusy.serialportproject.util.CommonConfig
 import com.wusy.serialportproject.util.JDQType
 import com.wusy.serialportproject.util.SerialPortUtil
@@ -99,8 +100,7 @@ class EnvAirActivity : BaseTouchActivity() {
     private var isCryogen = false
     //自动制热
     private var isHeating = false
-    //新风是否打开
-    private var isXF = false
+
     //新风定时按钮是否打开
     private var isXFTime = false
     private var nextTime = 0L
@@ -192,7 +192,10 @@ class EnvAirActivity : BaseTouchActivity() {
             navigateTo(SettingActivity::class.java)
         }
         rlRepair.setOnClickListener {
-
+            startActivity(Intent().apply {
+                setClass(this@EnvAirActivity, ScreenActivity::class.java)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            })
         }
         //状态重置
         restoreSwitchBtnState()
@@ -468,6 +471,8 @@ class EnvAirActivity : BaseTouchActivity() {
                 Logger.i("当前温度：${enD.temp}  目标温度：${curTemp} 开始发送打开制冷命令")
                 btnClodBean.isOpen = true
                 sendJDQControl(btnClodBean)
+                btnXFBean.isOpen=true
+                sendJDQControl(btnXFBean)
             } else if (enD.temp < curTemp - 1) {
                 if (btnClodBean.isOpen) {//温度低了，发送关闭制冷
                     Logger.i("当前温度：${enD.temp}  目标温度：${curTemp} 开始发送关闭制冷命令")
@@ -504,6 +509,8 @@ class EnvAirActivity : BaseTouchActivity() {
                 sendJDQControl(btnCSBean)
                 btnJSBean.isOpen = true
                 sendJDQControl(btnJSBean)
+                btnXFBean.isOpen=true
+                sendJDQControl(btnXFBean)
             } else if (enD.humidity > JSmin + 5 && enD.humidity < CSmax - 5) {
                 Logger.i("湿度适中，全关")
                 btnCSBean.isOpen = false
@@ -516,6 +523,8 @@ class EnvAirActivity : BaseTouchActivity() {
                 sendJDQControl(btnJSBean)
                 btnCSBean.isOpen = true
                 sendJDQControl(btnCSBean)
+                btnXFBean.isOpen=true
+                sendJDQControl(btnXFBean)
             } else {//维持现状
                 Logger.i("维持现状")
             }
@@ -535,6 +544,8 @@ class EnvAirActivity : BaseTouchActivity() {
                 if (btnHeatBean.isOpen) return
                 btnHeatBean.isOpen = true
                 sendJDQControl(btnHeatBean)
+                btnXFBean.isOpen=true
+                sendJDQControl(btnXFBean)
             } else if (enD.temp > curTemp + 1) {
                 if (btnHeatBean.isOpen) {//温度高，发送关闭制热
                     Logger.i("当前温度：${enD.temp}  目标温度：${curTemp} 开始发送关闭制热命令")
@@ -765,7 +776,6 @@ class EnvAirActivity : BaseTouchActivity() {
             }else{//未启动，将其打开
                 recordingBtnState(Constants.BTN_STATE_COLD, 0)
                 recordingBtnState(Constants.BTN_STATE_HEAT, 1)
-                recordingBtnState(Constants.BTN_STATE_XF, 1)
                 ZL(true)
             }
         }
@@ -778,54 +788,9 @@ class EnvAirActivity : BaseTouchActivity() {
             }else{//未启动，将其打开
                 recordingBtnState(Constants.BTN_STATE_COLD, 1)
                 recordingBtnState(Constants.BTN_STATE_HEAT, 0)
-                recordingBtnState(Constants.BTN_STATE_XF, 1)
                 ZR(true)
             }
         }
-        ivXF.setOnClickListener {
-            if (!isCanClick()) return@setOnClickListener
-            if (!isCanClickByOpen()) return@setOnClickListener
-            if(isXF){//正在启动，将其关闭
-
-                recordingBtnState(Constants.BTN_STATE_XF, 1)
-
-                XFON(false)
-
-            }else{//未启动，将其打开
-                recordingBtnState(Constants.BTN_STATE_COLD, 1)
-                recordingBtnState(Constants.BTN_STATE_HEAT, 1)
-                recordingBtnState(Constants.BTN_STATE_XF, 0)
-                XFON(true)
-            }
-        }
-//        /**
-//         * 制热
-//         */
-//        llHeat.setOnClickListener {
-//            if (!isCanClick()) return@setOnClickListener
-//            if (!isCanClickByOpen()) return@setOnClickListener
-//            recordingBtnState("ln", 1)
-//            ZR()
-//        }
-//        /**
-//         * 制冷
-//         */
-//
-//        llClod.setOnClickListener {
-//            if (!isCanClick()) return@setOnClickListener
-//            if (!isCanClickByOpen()) return@setOnClickListener
-//            recordingBtnState("ln", 2)
-//            ZL()
-//        }
-//        /**
-//         * 冷暖全关
-//         */
-//        llLNOFF.setOnClickListener {
-//            if (!isCanClick()) return@setOnClickListener
-//            Logger.i("正在冷暖全关")
-//            recordingBtnState("ln", 0)
-//            LNAllOff()
-//        }
         /**
          * 加湿
          */
@@ -849,8 +814,6 @@ class EnvAirActivity : BaseTouchActivity() {
          */
         llON.setOnClickListener {
             if (!isCanClick()) return@setOnClickListener
-//            buffer.delete(0, buffer.length)//定时更新下数据存储器，防止出现骚问题
-//            sendSerial(currentEnv.SearchStatusCode)
             if(SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_SWITCH,1)==0){
                 clickOFF()
             }else{
@@ -863,7 +826,12 @@ class EnvAirActivity : BaseTouchActivity() {
         llLJ.setOnClickListener {
             if (!isCanClick()) return@setOnClickListener
             if (!isCanClickByOpen()) return@setOnClickListener
-            clickLJ()
+            if(SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_MODE,0)==1){
+                clickModeNormal()
+            }else{
+                clickLJ()
+            }
+
         }
         /**
          * 节能按钮
@@ -871,15 +839,11 @@ class EnvAirActivity : BaseTouchActivity() {
         llJN.setOnClickListener {
             if (!isCanClick()) return@setOnClickListener
             if (!isCanClickByOpen()) return@setOnClickListener
-            clickJN()
-        }
-        /**
-         * 日常按钮
-         */
-        llNormal.setOnClickListener {
-            if (!isCanClick()) return@setOnClickListener
-            if (!isCanClickByOpen()) return@setOnClickListener
-            clickModeNormal()
+            if(SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_MODE,0)==2){
+                clickModeNormal()
+            }else{
+                clickJN()
+            }
         }
         /**
          * 新风
@@ -904,6 +868,7 @@ class EnvAirActivity : BaseTouchActivity() {
         ivON.setImageResource(R.mipmap.btn_on_selected)
         recordingBtnState(Constants.BTN_STATE_SWITCH, 0)
         restoreBtnState()
+        XFON(true)
         when(SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_MODE,0)){
             0->{
                 clickModeNormal()
@@ -946,15 +911,20 @@ class EnvAirActivity : BaseTouchActivity() {
             ) as String).split("℃")[0].toInt()
             tempControlView.setProgress(curTemp)
         } else {
-            showToast("请先选择冷暖模式")
-            return
+//            showToast("请先选择冷暖模式")
+//            return
         }
         Logger.i("离家模式启动")
-        ivNormal.setImageResource(R.mipmap.btn_daily_normal)
         ivLJ.setImageResource(R.mipmap.btn_outhome_selected)
         ivJN.setImageResource(R.mipmap.btn_energy_normal)
         recordingBtnState(Constants.BTN_STATE_MODE, 1)
-
+        //环境设置成内循环
+        SharedPreferencesUtil.getInstance(this)
+            .saveData(Constants.BTN_SETTING_XF_ISOUT, false)
+        FJControlIn()
+        //风机设为自动
+        SharedPreferencesUtil.getInstance(this)
+            .saveData(Constants.BTN_SETTING_FJ_ISAUTO, true)
     }
 
     private fun clickJN() {
@@ -972,33 +942,47 @@ class EnvAirActivity : BaseTouchActivity() {
             ) as String).split("℃")[0].toInt()
             tempControlView.setProgress(curTemp)
         } else {
-            showToast("请先选择冷暖模式")
-            return
+//            showToast("请先选择冷暖模式")
+//            return
         }
         FJContorl(0)//风阀切换到低
         SharedPreferencesUtil.getInstance(this).saveData(Constants.BTN_SETTING_FJ_ISAUTO, true)//风机切换到自动
         Logger.i("节能模式启动")
-        ivNormal.setImageResource(R.mipmap.btn_daily_normal)
         ivLJ.setImageResource(R.mipmap.btn_outhome_normal)
         ivJN.setImageResource(R.mipmap.btn_energy_selected)
         recordingBtnState(Constants.BTN_STATE_MODE, 2)
+        //新风切换到外循环和低
+        SharedPreferencesUtil.getInstance(this)
+            .saveData(Constants.BTN_SETTING_XF_ISOUT, true)
+        SharedPreferencesUtil.getInstance(this)
+            .saveData(Constants.BTN_SETTING_XF_OUT_TYPE, 0)
+        FJContorl(0)
+        //风机设为自动
+        SharedPreferencesUtil.getInstance(this)
+            .saveData(Constants.BTN_SETTING_FJ_ISAUTO, true)
     }
     private fun clickModeNormal() {
         Logger.i("日常模式启动")
         curTemp=SharedPreferencesUtil.getInstance(this).getData(Constants.LAST_TEMP,25).toString().toInt()
         tempControlView.setProgress(curTemp)
-        ivNormal.setImageResource(R.mipmap.btn_daily_selected)
         ivLJ.setImageResource(R.mipmap.btn_outhome_normal)
         ivJN.setImageResource(R.mipmap.btn_energy_normal)
         recordingBtnState(Constants.BTN_STATE_MODE, 0)
+        //切换正常模式时，开启外循环 和自动
+        SharedPreferencesUtil.getInstance(this)
+            .saveData(Constants.BTN_SETTING_XF_ISOUT, true)
+        SharedPreferencesUtil.getInstance(this)
+            .saveData(Constants.BTN_SETTING_XF_OUT_TYPE, 3)
+        FJContorl(3)
+        //风机设为自动
+        SharedPreferencesUtil.getInstance(this)
+            .saveData(Constants.BTN_SETTING_FJ_ISAUTO, false)
     }
     private fun ZR(isOpen: Boolean) {
         Logger.i("正在操作制热功能")
         if (isOpen){
             ivClod.setImageResource(R.mipmap.icon_cool_normal)
             ivHeat.setImageResource(R.mipmap.icon_heat_selected)
-            ivXF.setImageResource(R.mipmap.icon_fresh_normal)
-            isXF=false
             isHeating = true
             isCryogen = false
             btnClodBean.isOpen = false
@@ -1021,8 +1005,6 @@ class EnvAirActivity : BaseTouchActivity() {
         if(isOpen){
             ivClod.setImageResource(R.mipmap.icon_cool_selected)
             ivHeat.setImageResource(R.mipmap.icon_heat_normal)
-            ivXF.setImageResource(R.mipmap.icon_fresh_normal)
-            isXF=false
             isHeating = false
             isCryogen = true
             btnHeatBean.isOpen = false
@@ -1066,21 +1048,9 @@ class EnvAirActivity : BaseTouchActivity() {
     private fun XFON(isOpen: Boolean) {
         Logger.i("正在操作新风功能")
         if(isOpen){
-            ivXF.setImageResource(R.mipmap.icon_fresh_selected)
-            ivClod.setImageResource(R.mipmap.icon_cool_normal)
-            ivHeat.setImageResource(R.mipmap.icon_heat_normal)
-            isXF=true
-            isHeating = false
-            isCryogen = false
-            btnHeatBean.isOpen = false
-            sendJDQControl(btnHeatBean)
-            btnClodBean.isOpen = false
-            sendJDQControl(btnClodBean)
             btnXFBean.isOpen=true
             sendJDQControl(btnXFBean)
         }else{
-            ivXF.setImageResource(R.mipmap.icon_fresh_normal)
-            isXF=false
             btnXFBean.isOpen = false
             sendJDQControl(btnXFBean)
         }
@@ -1096,18 +1066,17 @@ class EnvAirActivity : BaseTouchActivity() {
         btnCSBean.isOpen = false
         sendJDQControl(btnCSBean)
 
-        if (SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_LN, 0) == 0 &&
-            SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_SD, 0) == 0
-        ) {
-            XFAllOff()
-        }
+//        if (SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_LN, 0) == 0 &&
+//            SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_SD, 0) == 0
+//        ) {
+//            XFAllOff()
+//        }
     }
 
     /**
      * 新风全关方法
      */
     private fun XFAllOff() {
-        recordingBtnState(Constants.BTN_STATE_XF, 1)
         isXFTime = false
         btnXFBean.isOpen = false
         sendJDQControl(btnXFBean)
@@ -1163,14 +1132,7 @@ class EnvAirActivity : BaseTouchActivity() {
                 JS()
             }
         }
-        when (SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_XF, 1)) {
-            0 -> {//新风开启
-                XFON(true)
-            }
-            1 -> {//关闭新风
-                XFON(false)
-            }
-        }
+
         when (SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_COLD, 1)) {
             0 -> {//制冷开启
                 ZL(true)
@@ -1269,22 +1231,11 @@ class EnvAirActivity : BaseTouchActivity() {
                         JS()
                     }
                 }
-            } else if (intent.action == CommonConfig.ACTION_ENVAIR_XF_CONTORL) {//其他页面控制湿度开关
+            } else if (intent.action == CommonConfig.ACTION_ENVAIR_XF_CONTORL) {//其他页面控制新风循环
                 if (intent.getBooleanExtra("isOut", true)) {//外循环
                     FJContorl(SharedPreferencesUtil.getInstance(context).getData(Constants.BTN_SETTING_XF_OUT_TYPE, Constants.DEFAULT_XF_OUTTYPE) as Int)
                 }else{//内循环
-                    btnWindBean.isOpen=false
-                    btnWindBean.switchIndex= MODE_Wind_Min
-                    sendJDQControl(btnWindBean)
-                    btnWindBean.isOpen=false
-                    btnWindBean.switchIndex= MODE_Wind_Max
-                    sendJDQControl(btnWindBean)
-                    btnWindBean.isOpen=false
-                    btnWindBean.switchIndex= MODE_Wind_Mid
-                    sendJDQControl(btnWindBean)
-                    btnWindBean.isOpen=true
-                    btnWindBean.switchIndex= MODE_Wind_Off
-                    sendJDQControl(btnWindBean)
+                    FJControlIn()
                 }
             }else if (intent.action == CommonConfig.ACTION_ENVAIR_FJ_CONTORL) {//其他页面控制湿度开关
                 FJContorl(intent.getIntExtra("FJType", Constants.DEFAULT_XF_OUTTYPE))
@@ -1296,6 +1247,20 @@ class EnvAirActivity : BaseTouchActivity() {
                 sendJDQSearch()
             }
         }
+    }
+    private fun FJControlIn(){
+        btnWindBean.isOpen=false
+        btnWindBean.switchIndex= MODE_Wind_Min
+        sendJDQControl(btnWindBean)
+        btnWindBean.isOpen=false
+        btnWindBean.switchIndex= MODE_Wind_Max
+        sendJDQControl(btnWindBean)
+        btnWindBean.isOpen=false
+        btnWindBean.switchIndex= MODE_Wind_Mid
+        sendJDQControl(btnWindBean)
+        btnWindBean.isOpen=true
+        btnWindBean.switchIndex= MODE_Wind_Off
+        sendJDQControl(btnWindBean)
     }
     private fun FJContorl(type:Int){
         when (type) {
