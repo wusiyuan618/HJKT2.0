@@ -12,7 +12,6 @@ import com.wusy.serialportproject.app.BaseTouchActivity
 import com.wusy.serialportproject.app.Constants
 import com.wusy.serialportproject.bean.EnvironmentalDetector
 import com.wusy.serialportproject.bean.OutSideTempBean
-import com.wusy.serialportproject.ui.EnvAirActivity
 import com.wusy.serialportproject.util.CommonConfig
 import com.wusy.wusylibrary.util.OkHttpUtil
 import kotlinx.android.synthetic.main.activity_screen.*
@@ -21,11 +20,14 @@ import okhttp3.Response
 import java.io.IOException
 
 import android.graphics.drawable.GradientDrawable
+import android.support.v7.widget.GridLayoutManager
 import android.view.View
 import com.wusy.wusylibrary.util.SharedPreferencesUtil
 import kotlinx.android.synthetic.main.activity_screen.layout_total
 import kotlinx.android.synthetic.main.activity_screen.tvContent
 import kotlinx.android.synthetic.main.activity_screen.tvTime
+import kotlinx.android.synthetic.main.item_screen_left.*
+import kotlinx.android.synthetic.main.item_screen_left_grid.*
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
@@ -34,6 +36,7 @@ import kotlin.collections.HashMap
 
 
 class ScreenActivity : BaseTouchActivity() {
+    private lateinit var adapter:ScreenAdapter
     private lateinit var bradCast: ScreenBroadCast
     override fun findView() {
     }
@@ -46,11 +49,12 @@ class ScreenActivity : BaseTouchActivity() {
         layout_total.setOnClickListener {
             finish()
         }
+        initLeftGrid()
         if (Constants.curED != null) {
-            initDate(Constants.curED!!)
+            initDateGrid(Constants.curED!!)
         }
         bradCast = ScreenBroadCast()
-        var actions = ArrayList<String>()
+        val actions = ArrayList<String>()
         actions.add(CommonConfig.ACTION_ENVIRONMENTALDETECOTOR_DATA)
         addBroadcastAction(actions, bradCast)
 
@@ -101,7 +105,49 @@ class ScreenActivity : BaseTouchActivity() {
             }
         }
     }
-
+    private fun initLeftGrid(){
+        recyclerView.layoutManager=GridLayoutManager(this,2)
+        adapter= ScreenAdapter(this)
+        adapter.list=ArrayList<ScreenAdapter.ScreenBean>().apply {
+            add(ScreenAdapter.ScreenBean().apply {
+                name="温度"
+                count="获取中..."
+                unit="℃"
+                status="获取中..."
+            })
+            add(ScreenAdapter.ScreenBean().apply {
+                name="湿度"
+                count="获取中..."
+                unit="%"
+                status="获取中..."
+            })
+            add(ScreenAdapter.ScreenBean().apply {
+                name="PM2.5"
+                count="获取中..."
+                unit="μg/m³"
+                status="获取中..."
+            })
+            add(ScreenAdapter.ScreenBean().apply {
+                name="二氧化碳"
+                count="获取中..."
+                unit="ppm"
+                status="获取中..."
+            })
+            add(ScreenAdapter.ScreenBean().apply {
+                name="甲醛"
+                count="获取中..."
+                unit="mg/m3"
+                status="获取中..."
+            })
+            add(ScreenAdapter.ScreenBean().apply {
+                name="TVOC"
+                count="获取中..."
+                unit="mg/m3"
+                status="获取中..."
+            })
+        }
+        recyclerView.adapter=adapter
+    }
     override fun getContentViewId(): Int {
         return R.layout.activity_screen
     }
@@ -126,6 +172,110 @@ class ScreenActivity : BaseTouchActivity() {
         tvAQIQuality.setTextColor(Color.parseColor(map["textColor"]))
         tvAQI.text = ed.AQI.toString()
         tvAQI.setTextColor(Color.parseColor(map["color"]))
+    }
+    private fun initDateGrid(ed: EnvironmentalDetector) {
+        for (item in adapter.list){
+            when(item.name){
+                "温度"->{
+                    item.count=ed.temp.toString()
+                    when {
+                        ed.temp<22 -> {
+                            item.color="#0D83C7"
+                            item.status="微冷"
+                        }
+                        ed.temp>26 -> {
+                            item.color="#CD5C35"
+                            item.status="微热"
+                        }
+                        else -> {
+                            item.color="#059E04"
+                            item.status="舒适"
+                        }
+                    }
+                }
+                "湿度"->{
+                    item.count=ed.humidity.toString()
+                    when {
+                        ed.humidity<0.3 -> {
+                            item.color="#CD5C35"
+                            item.status="干燥"
+                        }
+                        ed.humidity>0.7 -> {
+                            item.color="#0D83C7"
+                            item.status="潮湿"
+                        }
+                        else -> {
+                            item.color="#059E04"
+                            item.status="舒适"
+                        }
+                    }
+                }
+                "PM2.5"->{
+                    item.count=ed.pM2_5.toString()
+                    when {
+                        ed.pM2_5 in 0..35 -> {
+                            item.color="#059E04"
+                            item.status="优"
+                        }
+                        ed.pM2_5 in 36..50 -> {
+                            item.color="#FFBB14"
+                            item.status="良"
+                        }
+                        ed.pM2_5 in 51..75 -> {
+                            item.color="#F59327"
+                            item.status="轻度污染"
+                        }
+                        ed.pM2_5 in 76..125 -> {
+                            item.color="#CD5C35"
+                            item.status="中度污染"
+                        }
+                        else -> {
+                            item.color="#802617"
+                            item.status="严重污染"
+                        }
+                    }
+                }
+                "二氧化碳"->{
+                    item.count=ed.cO2.toString()
+                    when {
+                        ed.cO2<=1000 -> {
+                            item.color="#059E04"
+                            item.status="空气清晰"
+                        }
+                        else -> {
+                            item.color="#CD5C35"
+                            item.status="空气污浊"
+                        }
+                    }
+                }
+                "甲醛"->{
+                    item.count=ed.formaldehyde.toString()
+                    when {
+                        ed.formaldehyde<0.08 -> {
+                            item.color="#059E04"
+                            item.status="符合标准"
+                        }
+                        else -> {
+                            item.color="#CD5C35"
+                            item.status="空气污染"
+                        }
+                    }
+                }
+                "TVOC"->{
+                    item.count=ed.tvoc.toString()
+                    when {
+                        ed.tvoc<0.6 -> {
+                            item.color="#059E04"
+                            item.status="符合标准"
+                        }
+                        else -> {
+                            item.color="#CD5C35"
+                            item.status="空气污染"
+                        }
+                    }
+                }
+            }
+        }
     }
 
     fun initOutSideData(bean: OutSideTempBean) {

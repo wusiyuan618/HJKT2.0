@@ -7,4 +7,5 @@ class SettingBean{
     var title:String?=null
     var isSelect:Boolean?=null
     var needPwd:Boolean=false
+    var isShow:Boolean=true
 }

@@ -66,7 +66,8 @@ class Constants {
         //增值服务 过滤器和灯管的更新时间
         const val VALUEADDED_UPDATE_DATE_FILTER="valueadded_update_date_filter"
         const val VALUEADDED_UPDATE_DATE_LIGHT="valueadded_update_date_light"
-
+        //记录温度编程的数据
+        const val TEMP_CODE="temp_code"
         /**
          * -------------------------------------------------
          */

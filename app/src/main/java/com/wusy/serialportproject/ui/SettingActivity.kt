@@ -7,6 +7,7 @@ import com.wusy.serialportproject.R
 import com.wusy.serialportproject.adapter.SettingAdapter
 import com.wusy.serialportproject.app.BaseTouchActivity
 import com.wusy.serialportproject.bean.SettingBean
+import com.wusy.serialportproject.popup.NumberBoxPopup
 import com.wusy.wusylibrary.base.BaseActivity
 import com.wusy.wusylibrary.base.BaseRecyclerAdapter
 import kotlinx.android.synthetic.main.activity_setting.*
@@ -47,16 +48,23 @@ class SettingActivity: BaseTouchActivity(){
             ft.add(R.id.fragmentBox,this.fragment as FreshSettingFragment,"FreshSettingFragment")
         })
         list.add(SettingBean().apply {
+            this.title="温度编程"
+            this.isSelect=false
+            this.fragment=TempCodeFragment()
+            ft.add(R.id.fragmentBox,this.fragment as TempCodeFragment,"TempCodeFragment")
+        })
+        list.add(SettingBean().apply {
             this.title="维保"
             this.isSelect=false
             this.fragment=RepairFragment()
             ft.add(R.id.fragmentBox,this.fragment as RepairFragment,"RepairFragment")
         })
+
         list.add(SettingBean().apply {
             this.title="系统设置"
             this.isSelect=false
+            this.isShow=false
             this.fragment=SystemSettingFragment()
-            this.needPwd=true
             ft.add(R.id.fragmentBox,this.fragment as SystemSettingFragment,"SystemSettingFragment")
         })
         ft.commit()

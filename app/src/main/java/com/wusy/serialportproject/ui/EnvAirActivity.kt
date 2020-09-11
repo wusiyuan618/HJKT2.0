@@ -15,6 +15,8 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.google.gson.Gson
+import com.google.gson.JsonParser
 import com.orhanobut.logger.Logger
 import com.wusy.serialportproject.R
 import com.wusy.serialportproject.app.BaseTouchActivity
@@ -40,6 +42,7 @@ import kotlinx.android.synthetic.main.activity_item_envair_right_new.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class EnvAirActivity : BaseTouchActivity() {
@@ -200,13 +203,22 @@ class EnvAirActivity : BaseTouchActivity() {
         //状态重置
         restoreSwitchBtnState()
     }
+    var weekMap=HashMap<String,Int>().apply {
+        put("周日",1)
+        put("周一",2)
+        put("周二",3)
+        put("周三",4)
+        put("周四",5)
+        put("周五",6)
+        put("周六",7)
 
+    }
     private fun initThread() {
         Thread(Runnable {
             //这是一个每1min执行一次的定时器，用于检测寄电器状态和环境状态
             while (true) {
+                val calendar = Calendar.getInstance()
                 if (isXFTime) {//新风定时功能启动中
-                    var calendar = Calendar.getInstance()
                     if (SimpleDateFormat("hh:mm").format(Date(nextTime)) == SimpleDateFormat("hh:mm").format(
                             Date(calendar.timeInMillis)
                         )
@@ -221,6 +233,46 @@ class EnvAirActivity : BaseTouchActivity() {
                 buffer.delete(0, buffer.length)//定时更新下数据存储器，防止出现骚问题
                 sendJDQSearch()
                 Thread.sleep(58 * 1000)
+
+
+            }
+        }).start()
+        Thread(Runnable {
+            //温度编程
+            while(true){
+                val calendar = Calendar.getInstance()
+                //温度编程 需要每分钟执行一次
+                val str =
+                    SharedPreferencesUtil.getInstance(this).getData(Constants.TEMP_CODE, "").toString()
+                if (str != "") {
+                    val gson = Gson()//创建Gson对象
+                    val jsonParser = JsonParser()
+                    val jsonElements = jsonParser.parse(str).asJsonArray//获取JsonArray对象
+                    for (bean in jsonElements) {
+                        val tempBean=gson.fromJson(bean, TempCodeFragment.TempCodeBean::class.java)
+                        val startWeek=tempBean.startTime.split(" ")[0]
+                        val startHour=tempBean.startTime.split(" ")[1].split(":")[0].toInt()
+                        val startMin=tempBean.startTime.split(" ")[1].split(":")[1].toInt()
+                        val curWeek=calendar.get(Calendar.DAY_OF_WEEK)
+                        val curHour=calendar.get(Calendar.HOUR_OF_DAY)
+                        val curMin=calendar.get(Calendar.MINUTE)
+                        if(curWeek==weekMap[startWeek]){
+                            if(curHour==startHour&& curMin==startMin){//时间对上了，准备调温
+                                curTemp = tempBean.temp.replace("℃","").toInt()
+                                runOnUiThread {
+                                    tempControlView.setProgress(curTemp)
+                                }
+                                SharedPreferencesUtil.getInstance(this@EnvAirActivity)
+                                    .saveData(Constants.ENJOYTEMP, curTemp)
+                                if(SharedPreferencesUtil.getInstance(this@EnvAirActivity).getData(Constants.BTN_STATE_MODE,0)==0){
+                                    SharedPreferencesUtil.getInstance(this@EnvAirActivity)
+                                        .saveData(Constants.LAST_TEMP, curTemp)
+                                }
+                            }
+                        }
+                    }
+                }
+                Thread.sleep(60 * 1000)
             }
         }).start()
         Thread(Runnable {

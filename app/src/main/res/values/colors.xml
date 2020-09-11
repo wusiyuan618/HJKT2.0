@@ -7,5 +7,6 @@
     <color name="wheelNormalItem">#DFD5D5</color>
     <color name="colorText">#333333</color>
     <color name="colorBlack">#000000</color>
+    <color name="dividingLine">#F0EFF5</color>
 
 </resources>

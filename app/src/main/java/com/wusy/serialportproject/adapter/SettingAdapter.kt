@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.support.v4.app.FragmentManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.wusy.serialportproject.R
@@ -37,12 +38,16 @@ class SettingAdapter(context: Context) : BaseRecyclerAdapter<SettingBean>(contex
                 thisHolder.tv.background = null
                 thisHolder.tv.setTextColor(Color.parseColor("#666666"))
             }
+            if(list[position].isShow) thisHolder.setVisibility(View.VISIBLE)
+            else thisHolder.setVisibility(View.GONE)
             thisHolder.tv.setOnClickListener {
-                if (list[position].needPwd) {
+                changeSelectStatus(position)
+            }
+            thisHolder.tv.setOnLongClickListener {
+                if (list[position].title=="维保") {
                     beginEditPwd(position)
-                } else {
-                    changeSelectStatus(position)
                 }
+                true
             }
         }
     }
@@ -83,7 +88,9 @@ class SettingAdapter(context: Context) : BaseRecyclerAdapter<SettingBean>(contex
                         pwd += pwds[i]
                     }
                     if (pwd == Constants.DEFAULT_SYSTEM_SETTINGPWD) {
-                        changeSelectStatus(position)
+//                        changeSelectStatus(position)
+                        list[list.size-1].isShow=true
+                        notifyDataSetChanged()
                     } else {
                         Toast.makeText(context, "密码错误", Toast.LENGTH_SHORT).show()
                     }
