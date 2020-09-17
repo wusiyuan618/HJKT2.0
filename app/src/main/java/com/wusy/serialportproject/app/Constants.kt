@@ -68,6 +68,10 @@ class Constants {
         const val VALUEADDED_UPDATE_DATE_LIGHT="valueadded_update_date_light"
         //记录温度编程的数据
         const val TEMP_CODE="temp_code"
+        //记录维保时间
+        const val WBTIME="WBTIME"
+        const val NESTWBTIME="NESTWBTIME"
+
         /**
          * -------------------------------------------------
          */

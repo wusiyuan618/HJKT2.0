@@ -84,7 +84,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="制冷节能温度"
+                    android:text="制热节能温度"
                     android:textColor="#ffffffff"
                     android:textSize="24sp" />
 

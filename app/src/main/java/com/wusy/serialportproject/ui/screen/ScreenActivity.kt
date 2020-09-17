@@ -158,21 +158,21 @@ class ScreenActivity : BaseTouchActivity() {
         Constants.isOpenScreen = false
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun initDate(ed: EnvironmentalDetector) {
-        tvTempCount.text = ed.temp.toString() + " ℃"
-        tvHumCount.text = ed.humidity.toString() + "%"
-        tvCO2Count.text = ed.cO2.toString() + " μg/m³"
-        tvPM25Count.text = ed.pM2_5.toString() + " μg/m³"
-        tvTVOCCount.text = ed.tvoc.toString()
-        val map = getAQIIconMap(ed.AQI)
-        tvAQIQuality.text = map["text"]
-        val mGradientDrawable = tvAQIQuality.background as GradientDrawable
-        mGradientDrawable.setColor(Color.parseColor(map["color"]))
-        tvAQIQuality.setTextColor(Color.parseColor(map["textColor"]))
-        tvAQI.text = ed.AQI.toString()
-        tvAQI.setTextColor(Color.parseColor(map["color"]))
-    }
+//    @SuppressLint("SetTextI18n")
+//    private fun initDate(ed: EnvironmentalDetector) {
+//        tvTempCount.text = ed.temp.toString() + " ℃"
+//        tvHumCount.text = ed.humidity.toString() + "%"
+//        tvCO2Count.text = ed.cO2.toString() + " μg/m³"
+//        tvPM25Count.text = ed.pM2_5.toString() + " μg/m³"
+//        tvTVOCCount.text = ed.tvoc.toString()
+//        val map = getAQIIconMap(ed.AQI)
+//        tvAQIQuality.text = map["text"]
+//        val mGradientDrawable = tvAQIQuality.background as GradientDrawable
+//        mGradientDrawable.setColor(Color.parseColor(map["color"]))
+//        tvAQIQuality.setTextColor(Color.parseColor(map["textColor"]))
+//        tvAQI.text = ed.AQI.toString()
+//        tvAQI.setTextColor(Color.parseColor(map["color"]))
+//    }
     private fun initDateGrid(ed: EnvironmentalDetector) {
         for (item in adapter.list){
             when(item.name){
@@ -196,11 +196,11 @@ class ScreenActivity : BaseTouchActivity() {
                 "湿度"->{
                     item.count=ed.humidity.toString()
                     when {
-                        ed.humidity<0.3 -> {
+                        ed.humidity<30 -> {
                             item.color="#CD5C35"
                             item.status="干燥"
                         }
-                        ed.humidity>0.7 -> {
+                        ed.humidity>70 -> {
                             item.color="#0D83C7"
                             item.status="潮湿"
                         }
@@ -321,7 +321,7 @@ class ScreenActivity : BaseTouchActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
                 CommonConfig.ACTION_ENVIRONMENTALDETECOTOR_DATA -> {
-                    if (Constants.curED != null) initDate(Constants.curED!!)
+                    if (Constants.curED != null) initDateGrid(Constants.curED!!)
                 }
             }
         }
