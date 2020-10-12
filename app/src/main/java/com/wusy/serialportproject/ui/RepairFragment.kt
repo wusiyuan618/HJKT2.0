@@ -29,7 +29,7 @@ class RepairFragment :BaseFragment() {
                 val curDate = dft.format(calendar?.timeInMillis)
                 Log.i("wsy",curDate)
                 tvWBTime.text="本次维保时间：${curDate}"
-                val nestWBTime=getOldDate(Date(calendar?.timeInMillis?:System.currentTimeMillis()),3)
+                val nestWBTime=getOldDate(Date(calendar?.timeInMillis?:System.currentTimeMillis()),6)
                 tvWBNextTime.text="下次维保时间：${nestWBTime}"
                 SharedPreferencesUtil.getInstance(context).saveData(Constants.WBTIME,curDate)
                 SharedPreferencesUtil.getInstance(context).saveData(Constants.NESTWBTIME,nestWBTime)

@@ -36,7 +36,7 @@ import kotlin.collections.HashMap
 
 
 class ScreenActivity : BaseTouchActivity() {
-    private lateinit var adapter:ScreenAdapter
+    private lateinit var adapter: ScreenAdapter
     private lateinit var bradCast: ScreenBroadCast
     override fun findView() {
     }
@@ -105,49 +105,51 @@ class ScreenActivity : BaseTouchActivity() {
             }
         }
     }
-    private fun initLeftGrid(){
-        recyclerView.layoutManager=GridLayoutManager(this,2)
-        adapter= ScreenAdapter(this)
-        adapter.list=ArrayList<ScreenAdapter.ScreenBean>().apply {
+
+    private fun initLeftGrid() {
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
+        adapter = ScreenAdapter(this)
+        adapter.list = ArrayList<ScreenAdapter.ScreenBean>().apply {
             add(ScreenAdapter.ScreenBean().apply {
-                name="温度"
-                count="获取中..."
-                unit="℃"
-                status="获取中..."
+                name = "温度"
+                count = "0"
+                unit = "℃"
+                status = "获取中..."
             })
             add(ScreenAdapter.ScreenBean().apply {
-                name="湿度"
-                count="获取中..."
-                unit="%"
-                status="获取中..."
+                name = "湿度"
+                count = "0"
+                unit = "%"
+                status = "获取中..."
             })
             add(ScreenAdapter.ScreenBean().apply {
-                name="PM2.5"
-                count="获取中..."
-                unit="μg/m³"
-                status="获取中..."
+                name = "PM2.5"
+                count = "0"
+                unit = "μg/m³"
+                status = "获取中..."
             })
             add(ScreenAdapter.ScreenBean().apply {
-                name="二氧化碳"
-                count="获取中..."
-                unit="ppm"
-                status="获取中..."
+                name = "二氧化碳"
+                count = "0"
+                unit = "ppm"
+                status = "获取中..."
             })
             add(ScreenAdapter.ScreenBean().apply {
-                name="甲醛"
-                count="获取中..."
-                unit="mg/m3"
-                status="获取中..."
+                name = "甲醛"
+                count = "0"
+                unit = "mg/m3"
+                status = "获取中..."
             })
             add(ScreenAdapter.ScreenBean().apply {
-                name="TVOC"
-                count="获取中..."
-                unit="mg/m3"
-                status="获取中..."
+                name = "TVOC"
+                count = "0"
+                unit = "mg/m3"
+                status = "获取中..."
             })
         }
-        recyclerView.adapter=adapter
+        recyclerView.adapter = adapter
     }
+
     override fun getContentViewId(): Int {
         return R.layout.activity_screen
     }
@@ -158,9 +160,9 @@ class ScreenActivity : BaseTouchActivity() {
         Constants.isOpenScreen = false
     }
 
-//    @SuppressLint("SetTextI18n")
+    //    @SuppressLint("SetTextI18n")
 //    private fun initDate(ed: EnvironmentalDetector) {
-//        tvTempCount.text = ed.temp.toString() + " ℃"
+//        tvTempCount.text = ed.temp.toString() + " ℃"a
 //        tvHumCount.text = ed.humidity.toString() + "%"
 //        tvCO2Count.text = ed.cO2.toString() + " μg/m³"
 //        tvPM25Count.text = ed.pM2_5.toString() + " μg/m³"
@@ -174,108 +176,109 @@ class ScreenActivity : BaseTouchActivity() {
 //        tvAQI.setTextColor(Color.parseColor(map["color"]))
 //    }
     private fun initDateGrid(ed: EnvironmentalDetector) {
-        for (item in adapter.list){
-            when(item.name){
-                "温度"->{
-                    item.count=ed.temp.toString()
+        for (item in adapter.list) {
+            when (item.name) {
+                "温度" -> {
+                    item.count = ed.temp.toString()
                     when {
-                        ed.temp<22 -> {
-                            item.color="#0D83C7"
-                            item.status="微冷"
+                        ed.temp < 22 -> {
+                            item.color = "#0D83C7"
+                            item.status = "微冷"
                         }
-                        ed.temp>26 -> {
-                            item.color="#CD5C35"
-                            item.status="微热"
+                        ed.temp > 26 -> {
+                            item.color = "#CD5C35"
+                            item.status = "微热"
                         }
                         else -> {
-                            item.color="#059E04"
-                            item.status="舒适"
+                            item.color = "#059E04"
+                            item.status = "舒适"
                         }
                     }
                 }
-                "湿度"->{
-                    item.count=ed.humidity.toString()
+                "湿度" -> {
+                    item.count = ed.humidity.toString()
                     when {
-                        ed.humidity<30 -> {
-                            item.color="#CD5C35"
-                            item.status="干燥"
+                        ed.humidity < 30 -> {
+                            item.color = "#CD5C35"
+                            item.status = "干燥"
                         }
-                        ed.humidity>70 -> {
-                            item.color="#0D83C7"
-                            item.status="潮湿"
+                        ed.humidity > 70 -> {
+                            item.color = "#0D83C7"
+                            item.status = "潮湿"
                         }
                         else -> {
-                            item.color="#059E04"
-                            item.status="舒适"
+                            item.color = "#059E04"
+                            item.status = "舒适"
                         }
                     }
                 }
-                "PM2.5"->{
-                    item.count=ed.pM2_5.toString()
+                "PM2.5" -> {
+                    item.count = ed.pM2_5.toString()
                     when {
                         ed.pM2_5 in 0..35 -> {
-                            item.color="#059E04"
-                            item.status="优"
+                            item.color = "#059E04"
+                            item.status = "优"
                         }
                         ed.pM2_5 in 36..50 -> {
-                            item.color="#FFBB14"
-                            item.status="良"
+                            item.color = "#FFBB14"
+                            item.status = "良"
                         }
                         ed.pM2_5 in 51..75 -> {
-                            item.color="#F59327"
-                            item.status="轻度污染"
+                            item.color = "#F59327"
+                            item.status = "轻度污染"
                         }
                         ed.pM2_5 in 76..125 -> {
-                            item.color="#CD5C35"
-                            item.status="中度污染"
+                            item.color = "#CD5C35"
+                            item.status = "中度污染"
                         }
                         else -> {
-                            item.color="#802617"
-                            item.status="严重污染"
+                            item.color = "#802617"
+                            item.status = "严重污染"
                         }
                     }
                 }
-                "二氧化碳"->{
-                    item.count=ed.cO2.toString()
+                "二氧化碳" -> {
+                    item.count = ed.cO2.toString()
                     when {
-                        ed.cO2<=1000 -> {
-                            item.color="#059E04"
-                            item.status="空气清晰"
+                        ed.cO2 <= 1000 -> {
+                            item.color = "#059E04"
+                            item.status = "空气清晰"
                         }
                         else -> {
-                            item.color="#CD5C35"
-                            item.status="空气污浊"
+                            item.color = "#CD5C35"
+                            item.status = "空气污浊"
                         }
                     }
                 }
-                "甲醛"->{
-                    item.count=ed.formaldehyde.toString()
+                "甲醛" -> {
+                    item.count = ed.formaldehyde.toString()
                     when {
-                        ed.formaldehyde<0.08 -> {
-                            item.color="#059E04"
-                            item.status="符合标准"
+                        ed.formaldehyde < 0.08 -> {
+                            item.color = "#059E04"
+                            item.status = "符合标准"
                         }
                         else -> {
-                            item.color="#CD5C35"
-                            item.status="空气污染"
+                            item.color = "#CD5C35"
+                            item.status = "空气污染"
                         }
                     }
                 }
-                "TVOC"->{
-                    item.count=ed.tvoc.toString()
+                "TVOC" -> {
+                    item.count = ed.tvoc.toString()
                     when {
-                        ed.tvoc<0.6 -> {
-                            item.color="#059E04"
-                            item.status="符合标准"
+                        ed.tvoc < 0.6 -> {
+                            item.color = "#059E04"
+                            item.status = "符合标准"
                         }
                         else -> {
-                            item.color="#CD5C35"
-                            item.status="空气污染"
+                            item.color = "#CD5C35"
+                            item.status = "空气污染"
                         }
                     }
                 }
             }
         }
+        adapter.notifyDataSetChanged()
     }
 
     fun initOutSideData(bean: OutSideTempBean) {
@@ -309,6 +312,7 @@ class ScreenActivity : BaseTouchActivity() {
                             initOutSideData(bean)
                         }
                     }
+
                     override fun failListener(call: Call?, e: IOException?, message: String?) {
                     }
 

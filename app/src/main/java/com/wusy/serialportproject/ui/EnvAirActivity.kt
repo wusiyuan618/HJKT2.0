@@ -84,6 +84,8 @@ class EnvAirActivity : BaseTouchActivity() {
          */
         val currentJDQ: BaseDevices = ZZIO1600()
         val currentEnv: BaseDevices = EnvQ3()
+//        val currentEnv: BaseDevices = TextEnvDevice()
+
     }
 
 
@@ -135,6 +137,7 @@ class EnvAirActivity : BaseTouchActivity() {
         initView()
         initBroadCast()
         initThread()
+        initTestDevices()
     }
 
     private fun requestPermissions() {
@@ -175,22 +178,7 @@ class EnvAirActivity : BaseTouchActivity() {
         tempControlView.setOnTextFinishListener(object :
             CirqueProgressControlView.OnCirqueProgressChangeListener {
             override fun onChange(minProgress: Int, maxProgress: Int, progress: Int) {
-                if (isCryogen) {
-                    if (Constants.curED != null && progress > Constants.curED!!.temp) {
-                        //不制冷的时候把按钮颜色换了
-                        tempControlView.setRingColor(Color.parseColor("#7E7D7D"))
-                    }else{
-                        tempControlView.setRingColor(Color.parseColor("#2793ff"))
-                    }
-                }
-                if (isHeating) {
-                    if (Constants.curED != null && progress < Constants.curED!!.temp) {
-                        //不制热的时候把按钮颜色换了
-                        tempControlView.setRingColor(Color.parseColor("#7E7D7D"))
-                    }else{
-                        tempControlView.setRingColor(Color.parseColor("#eb4f39"))
-                    }
-                }
+                checkRingColor(progress)
             }
 
             override fun onChangeEnd(minProgress: Int, maxProgress: Int, progress: Int) {
@@ -234,7 +222,6 @@ class EnvAirActivity : BaseTouchActivity() {
         put("周四", 5)
         put("周五", 6)
         put("周六", 7)
-
     }
 
     private fun initThread() {
@@ -297,6 +284,36 @@ class EnvAirActivity : BaseTouchActivity() {
                                 ) {
                                     SharedPreferencesUtil.getInstance(this@EnvAirActivity)
                                         .saveData(Constants.LAST_TEMP, curTemp)
+                                }
+                                //调模式
+
+                                when {
+                                    tempBean.mode=="制冷" -> if(isCanClickByOpen()) {
+                                        recordingBtnState(Constants.BTN_STATE_COLD, 0)
+                                        recordingBtnState(Constants.BTN_STATE_HEAT, 1)
+                                        runOnUiThread {
+                                            ZL(true)
+                                        }
+
+                                    }
+                                    tempBean.mode=="制热" -> if(isCanClickByOpen()){
+                                        recordingBtnState(Constants.BTN_STATE_COLD, 1)
+                                        recordingBtnState(Constants.BTN_STATE_HEAT, 0)
+                                        runOnUiThread {
+                                            ZR(true)
+                                        }
+                                    }
+                                    tempBean.mode=="通风" -> {
+                                        if(isCanClickByOpen()){
+                                            recordingBtnState(Constants.BTN_STATE_COLD, 1)
+                                            recordingBtnState(Constants.BTN_STATE_HEAT, 1)
+                                            runOnUiThread {
+                                                ZL(false)
+                                                ZR(false)
+                                            }
+                                        }
+                                    }
+                                    else -> Logger.i("未设置模式")
                                 }
                             }
                         }
@@ -490,6 +507,35 @@ class EnvAirActivity : BaseTouchActivity() {
         }
     }
 
+    /**
+     * 做一个测试数据
+     */
+    private fun initTestDevices(){
+        if(currentEnv !is TextEnvDevice) return
+        val enD = EnvironmentalDetector("", currentEnv)
+        Constants.curED = enD
+        tvTempCount.text = enD.temp.toString()
+        tvHumidityCount.text = enD.humidity.toString()
+        tvAirQualityCount.text = enD.pM2_5.toString()
+        sendBroadcast(Intent().apply {
+            action = CommonConfig.ACTION_SYSTEMTEST_LOG
+            putExtra("log", "EmvAorActivity发送串口数据=${currentEnv.log}")
+        })
+        /* 开启制冷制热 */
+        if (SharedPreferencesUtil.getInstance(this@EnvAirActivity).getData(
+                Constants.BTN_STATE_SWITCH,
+                1
+            ) == 0
+        ) {
+            Logger.i("自动控制检测开始")
+            startAutoCryogen(enD)
+            startAutoHeating(enD)
+            startControlXF(enD)
+            startContorlSD(enD)
+        } else {
+            Logger.i("已获取环境数据，但空调未开机")
+        }
+    }
     private val handler = @SuppressLint("HandlerLeak")
     object : Handler() {
         override fun handleMessage(msg: Message) {
@@ -510,6 +556,9 @@ class EnvAirActivity : BaseTouchActivity() {
                         action = CommonConfig.ACTION_SYSTEMTEST_LOG
                         putExtra("log", "EmvAorActivity发送串口数据=${currentEnv.log}")
                     })
+
+                    /* 调节圆盘颜色 */
+                    checkRingColor(curTemp)
                     /* 开启制冷制热 */
                     if (SharedPreferencesUtil.getInstance(this@EnvAirActivity).getData(
                             Constants.BTN_STATE_SWITCH,
@@ -575,7 +624,24 @@ class EnvAirActivity : BaseTouchActivity() {
             }
         }
     }
-
+    private fun checkRingColor(ringTemp:Int){
+        if (isCryogen) {
+            if (Constants.curED != null && ringTemp > Constants.curED!!.temp) {
+                //不制冷的时候把按钮颜色换了
+                tempControlView.setRingColor(Color.parseColor("#7E7D7D"))
+            }else{
+                tempControlView.setRingColor(Color.parseColor("#2793ff"))
+            }
+        }
+        if (isHeating) {
+            if (Constants.curED != null && ringTemp < Constants.curED!!.temp) {
+                //不制热的时候把按钮颜色换了
+                tempControlView.setRingColor(Color.parseColor("#7E7D7D"))
+            }else{
+                tempControlView.setRingColor(Color.parseColor("#eb4f39"))
+            }
+        }
+    }
     /**
      * 自动制冷
      */
@@ -1051,6 +1117,7 @@ class EnvAirActivity : BaseTouchActivity() {
         //风机设为自动
         SharedPreferencesUtil.getInstance(this)
             .saveData(Constants.BTN_SETTING_FJ_ISAUTO, true)
+        checkRingColor(curTemp)
     }
 
     private fun clickJN() {
@@ -1087,6 +1154,7 @@ class EnvAirActivity : BaseTouchActivity() {
         //风机设为自动
         SharedPreferencesUtil.getInstance(this)
             .saveData(Constants.BTN_SETTING_FJ_ISAUTO, true)
+        checkRingColor(curTemp)
     }
 
     private fun clickModeNormal() {
@@ -1107,6 +1175,7 @@ class EnvAirActivity : BaseTouchActivity() {
         //风机设为自动
         SharedPreferencesUtil.getInstance(this)
             .saveData(Constants.BTN_SETTING_FJ_ISAUTO, false)
+        checkRingColor(curTemp)
     }
 
     private fun ZR(isOpen: Boolean) {
@@ -1122,7 +1191,7 @@ class EnvAirActivity : BaseTouchActivity() {
             sendJDQControl(btnHeatBean)
             btnXFBean.isOpen = true
             sendJDQControl(btnXFBean)
-            tempControlView.setRingColor(Color.parseColor("#eb4f39"))
+            checkRingColor(curTemp)
         } else {
             ivHeat.setImageResource(R.mipmap.icon_heat_normal)
             isHeating = false
@@ -1144,7 +1213,7 @@ class EnvAirActivity : BaseTouchActivity() {
             sendJDQControl(btnClodBean)
             btnXFBean.isOpen = true
             sendJDQControl(btnXFBean)
-            tempControlView.setRingColor(Color.parseColor("#2793ff"))
+            checkRingColor(curTemp)
         } else {
             ivClod.setImageResource(R.mipmap.icon_cool_normal)
             isCryogen = false

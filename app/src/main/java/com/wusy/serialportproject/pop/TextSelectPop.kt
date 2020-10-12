@@ -10,9 +10,8 @@ import com.wusy.serialportproject.R
 import razerdp.basepopup.BasePopupWindow
 import java.util.*
 
-class TempSelectPop (context: Context) : BasePopupWindow(context) {
+class TextSelectPop (context: Context) : BasePopupWindow(context) {
     var wheelTemp = findViewById<WheelPicker>(R.id.wheelTemp)
-
     var btnOk = findViewById<TextView>(R.id.tvOk)
     var btnCancel = findViewById<TextView>(R.id.tvCancel)
     var isHideDayWheel=false
@@ -33,8 +32,9 @@ class TempSelectPop (context: Context) : BasePopupWindow(context) {
         return createPopupById(R.layout.pop_temp)
     }
 
-    fun init(listen: View.OnClickListener) {
-        wheelTemp.data = createTemp()
+    fun init(listen: View.OnClickListener,type:String) {
+        if(type=="temp") wheelTemp.data = createTemp()
+        else wheelTemp.data = createMode()
         btnOk.setOnClickListener(listen)
         btnCancel.setOnClickListener {
             dismiss()
@@ -53,13 +53,19 @@ class TempSelectPop (context: Context) : BasePopupWindow(context) {
     }
 
     private fun createTemp(): ArrayList<String> {
-        var list = ArrayList<String>()
+        val list = ArrayList<String>()
         for (i in 5..30){
             list.add("${i}℃")
         }
         return list
     }
-
+    private fun createMode(): ArrayList<String> {
+        val list = ArrayList<String>()
+        list.add("制冷")
+        list.add("制热")
+        list.add("通风")
+        return list
+    }
 
     fun getDate(): String {
         return wheelTemp.data[wheelTemp.currentItemPosition].toString()

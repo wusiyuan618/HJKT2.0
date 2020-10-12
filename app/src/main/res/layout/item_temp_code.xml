@@ -35,6 +35,14 @@
             android:textColor="#ffffffff"
             android:textSize="24sp" />
         <TextView
+            android:id="@+id/tvMode"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="模式："
+            android:textColor="#ffffffff"
+            android:textSize="24sp" />
+        <TextView
             android:id="@+id/tvDelete"
             android:padding="20dp"
             android:text="删除"

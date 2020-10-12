@@ -17,6 +17,8 @@ class DateSDSelectPop(context: Context) : BasePopupWindow(context) {
     var tvEndTime = contentView.findViewById<TextView>(R.id.tvEndTime)
     var rlTemp = contentView.findViewById<RelativeLayout>(R.id.rlTemp)
     var tvTemp = contentView.findViewById<TextView>(R.id.tvTemp)
+    var rlMode = contentView.findViewById<RelativeLayout>(R.id.rlMode)
+    var tvMode = contentView.findViewById<TextView>(R.id.tvMode)
     var btnOk = contentView.findViewById<TextView>(R.id.btn_ok)
     var listener:ClickOkListener?=null
     var startPop: DateSelectPop = DateSelectPop(context).apply {
@@ -31,11 +33,17 @@ class DateSDSelectPop(context: Context) : BasePopupWindow(context) {
             dismiss()
         })
     }
-    var tempPop: TempSelectPop = TempSelectPop(context).apply {
+    var tempPop: TextSelectPop = TextSelectPop(context).apply {
         init(View.OnClickListener {
             tvTemp.text = getDate()
             dismiss()
-        })
+        },"temp")
+    }
+    var modePop: TextSelectPop = TextSelectPop(context).apply {
+        init(View.OnClickListener {
+            tvMode.text = getDate()
+            dismiss()
+        },"mode")
     }
     init {
         setBlurBackgroundEnable(true)
@@ -50,6 +58,9 @@ class DateSDSelectPop(context: Context) : BasePopupWindow(context) {
         rlTemp.setOnClickListener {
             tempPop.showPopupWindow()
         }
+        rlMode.setOnClickListener {
+            modePop.showPopupWindow()
+        }
         btnOk.setOnClickListener {
             if(tvStartTime.text.isEmpty()){
                 Toast.makeText(context,"请选择开始时间",Toast.LENGTH_SHORT).show()
@@ -61,6 +72,10 @@ class DateSDSelectPop(context: Context) : BasePopupWindow(context) {
 //            }
             if(tvTemp.text.isEmpty()){
                 Toast.makeText(context,"请选择温度",Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            if(tvMode.text.isEmpty()){
+                Toast.makeText(context,"请选择模式",Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             listener?.run {
@@ -83,7 +98,7 @@ class DateSDSelectPop(context: Context) : BasePopupWindow(context) {
 //                    Toast.makeText(context,"结束时间不能晚于开始时间",Toast.LENGTH_SHORT).show()
 //                    return@setOnClickListener
 //                }
-                clickOk(tvStartTime.text.toString(),tvEndTime.text.toString(),tvTemp.text.toString())
+                clickOk(tvStartTime.text.toString(),tvEndTime.text.toString(),tvTemp.text.toString(),tvMode.text.toString())
                 dismiss()
             }
         }
@@ -102,6 +117,6 @@ class DateSDSelectPop(context: Context) : BasePopupWindow(context) {
         return createPopupById(R.layout.dialog_select_date)
     }
     open interface ClickOkListener{
-        fun clickOk(startTime:String,endTime:String,temp:String)
+        fun clickOk(startTime:String,endTime:String,temp:String,mode:String)
     }
 }

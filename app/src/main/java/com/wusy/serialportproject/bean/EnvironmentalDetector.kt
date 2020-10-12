@@ -45,13 +45,13 @@ class EnvironmentalDetector(data: String, devices: BaseDevices) {
                 this.AQI=(map["AQI"]?:0) as Int
             }
             "TestEnv"->{
-                this.pM2_5 =10
-                this.temp = 30.2f
-                this.humidity =75f
-                this.cO2 = 650
-                this.tvoc =2.35
+                this.pM2_5 =12
+                this.temp = 24.2f
+                this.humidity =59.0f
+                this.cO2 =810
+                this.tvoc =0.15
                 this.pM2_5Level = 1
-                this.AQI=20
+                this.formaldehyde = 0.043
             }
         }
 

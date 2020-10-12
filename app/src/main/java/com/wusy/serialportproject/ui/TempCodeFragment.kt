@@ -42,11 +42,12 @@ class TempCodeFragment : BaseFragment() {
 
         dateSDSelectPop = DateSDSelectPop(context!!)
         dateSDSelectPop.listener = object : DateSDSelectPop.ClickOkListener {
-            override fun clickOk(startTime: String, endTime: String, temp: String) {
+            override fun clickOk(startTime: String, endTime: String, temp: String,mode:String) {
                 adapter.list.add(TempCodeBean().apply {
                     this.startTime = startTime
                     this.endTime = endTime
                     this.temp = temp
+                    this.mode = mode
                 })
                 adapter.notifyDataSetChanged()
                 SharedPreferencesUtil.getInstance(context)
@@ -86,6 +87,8 @@ class TempCodeFragment : BaseFragment() {
                 list[position].run {
                     thisHolder.tvStartTime.text = "开始时间：${startTime}"
                     thisHolder.tvTemp.text = "温度：${temp}"
+                    thisHolder.tvMode.text = "模式：${mode}"
+
                     thisHolder.tvDelete.setOnClickListener {
                         list.remove(list[position])
                         notifyDataSetChanged()
@@ -103,6 +106,7 @@ class TempCodeFragment : BaseFragment() {
         var startTime = ""
         var endTime = ""
         var temp = ""
+        var mode=""
     }
 
     class TempCodeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -110,6 +114,6 @@ class TempCodeFragment : BaseFragment() {
         val tvEndTime = itemView.findViewById<TextView>(R.id.tvEndTime)
         val tvTemp = itemView.findViewById<TextView>(R.id.tvTemp)
         val tvDelete = itemView.findViewById<TextView>(R.id.tvDelete)
-
+        val tvMode = itemView.findViewById<TextView>(R.id.tvMode)
     }
 }

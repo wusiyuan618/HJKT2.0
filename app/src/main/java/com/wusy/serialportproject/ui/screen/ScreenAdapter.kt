@@ -25,8 +25,6 @@ class ScreenAdapter(context: Context) : BaseRecyclerAdapter<ScreenAdapter.Screen
             list[position].run {
                 thisHolder.tvCount.text=count
                 thisHolder.tvName.text=name
-                if(count=="获取中...") thisHolder.tvUnit.visibility=View.GONE
-                else thisHolder.tvUnit.visibility=View.VISIBLE
                 thisHolder.tvUnit.text=unit
                 thisHolder.tvStatus.text=status
                 val background =  thisHolder.tvStatus.background as GradientDrawable

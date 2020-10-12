@@ -3,10 +3,6 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         xmlns:android="http://schemas.android.com/apk/res/android">
-<!--<RelativeLayout android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:background="#000000"-->
-<!--        xmlns:android="http://schemas.android.com/apk/res/android">-->
     <TextView
             android:layout_alignLeft="@id/rlLN"
             android:id="@+id/tvLN"
