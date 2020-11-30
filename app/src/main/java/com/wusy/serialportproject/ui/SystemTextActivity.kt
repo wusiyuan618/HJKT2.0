@@ -7,9 +7,10 @@ import android.text.method.ScrollingMovementMethod
 import android.widget.ImageView
 import com.wusy.serialportproject.R
 import com.wusy.serialportproject.app.BaseTouchActivity
+import com.wusy.serialportproject.app.Constants
 import com.wusy.serialportproject.ui.screen.ScreenActivity
 import com.wusy.serialportproject.util.CommonConfig
-import com.wusy.wusylibrary.base.BaseActivity
+import com.wusy.wusylibrary.util.SharedPreferencesUtil
 import kotlinx.android.synthetic.main.activity_system_test.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -80,6 +81,9 @@ class SystemTextActivity: BaseTouchActivity() {
             this.add(CommonConfig.ACTION_SYSTEMTEST_LOG)
             this.add(CommonConfig.ACTION_SYSTEMTEST_JDQ)
         },SystemTestBroad())
+
+        val imgId= SharedPreferencesUtil.getInstance(this).getData(Constants.IMGID,R.mipmap.bg2) as Int
+        layout_total.setBackgroundResource(imgId)
     }
 
     override fun getContentViewId(): Int {

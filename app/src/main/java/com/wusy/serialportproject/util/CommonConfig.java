@@ -21,5 +21,6 @@ public class CommonConfig {
     public static final String ACTION_ENVAIRACTIVITY_SEND_JDQSEARCH="ACTION_ENVAIRACTIVITY_SEND_JDQSEARCH";
     //ACTION (EnvAirActivity发送环境数据查询命令)
     public static final String ACTION_ENVAIRACTIVITY_SEND_ENVSEARCH="ACTION_ENVAIRACTIVITY_SEND_ENVSEARCH";
-
+    //ACTION (背景更改)
+    public static final String ACTION_BGCKGROUND_IMG_CHANGE="ACTION_BGCKGROUND_IMG_CHANGE";
 }

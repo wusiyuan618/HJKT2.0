@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bg"
+    android:id="@+id/layout_total"
+    android:background="@mipmap/bg2"
     android:orientation="horizontal">
 
     <LinearLayout

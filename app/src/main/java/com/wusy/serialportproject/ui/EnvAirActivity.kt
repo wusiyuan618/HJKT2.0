@@ -24,6 +24,7 @@ import com.wusy.serialportproject.app.Constants
 import com.wusy.serialportproject.bean.EnvironmentalDetector
 import com.wusy.serialportproject.bean.EnvAirControlBean
 import com.wusy.serialportproject.devices.*
+import com.wusy.serialportproject.socket.SocketHelper
 import com.wusy.serialportproject.ui.screen.ScreenActivity
 import com.wusy.serialportproject.util.CommonConfig
 import com.wusy.serialportproject.util.JDQType
@@ -85,7 +86,7 @@ class EnvAirActivity : BaseTouchActivity() {
         val currentJDQ: BaseDevices = ZZIO1600()
         val currentEnv: BaseDevices = EnvQ3()
 //        val currentEnv: BaseDevices = TextEnvDevice()
-
+//        val currentEnv: BaseDevices = Ate24V()
     }
 
 
@@ -123,6 +124,7 @@ class EnvAirActivity : BaseTouchActivity() {
     lateinit var btnXFBean: EnvAirControlBean
     lateinit var btnWindBean: EnvAirControlBean
 
+    lateinit var socketHelper: SocketHelper
 
     override fun getContentViewId(): Int {
         return R.layout.activity_envair
@@ -135,6 +137,7 @@ class EnvAirActivity : BaseTouchActivity() {
     override fun init() {
         requestPermissions()
         initView()
+
         initBroadCast()
         initThread()
         initTestDevices()
@@ -212,6 +215,17 @@ class EnvAirActivity : BaseTouchActivity() {
         }
         //状态重置
         restoreSwitchBtnState()
+        //设置背景图片
+        val imgId=SharedPreferencesUtil.getInstance(this).getData(Constants.IMGID,R.mipmap.bg2) as Int
+        layout_total.setBackgroundResource(imgId)
+        //设置socket
+        socketHelper=SocketHelper.getInstance()
+        socketHelper.onReceiveListener= SocketHelper.OnReceiveListener {
+            Logger.i("socket-it")
+            Logger.i("socket$it")
+        }
+        socketHelper.addListensEvent()
+        socketHelper.connect()
     }
 
     var weekMap = HashMap<String, Int>().apply {
@@ -244,8 +258,7 @@ class EnvAirActivity : BaseTouchActivity() {
                 buffer.delete(0, buffer.length)//定时更新下数据存储器，防止出现骚问题
                 sendJDQSearch()
                 Thread.sleep(58 * 1000)
-
-
+                socketHelper.sendTest()
             }
         }).start()
         Thread(Runnable {
@@ -431,7 +444,7 @@ class EnvAirActivity : BaseTouchActivity() {
         actionList.add(CommonConfig.ACTION_ENVAIR_FJ_CONTORL)
         actionList.add(CommonConfig.ACTION_ENVAIRACTIVITY_SEND_JDQSEARCH)
         actionList.add(CommonConfig.ACTION_ENVAIRACTIVITY_SEND_ENVSEARCH)
-
+        actionList.add(CommonConfig.ACTION_BGCKGROUND_IMG_CHANGE)
         addBroadcastAction(actionList, boradCast)
     }
 
@@ -440,7 +453,7 @@ class EnvAirActivity : BaseTouchActivity() {
      * 发送寄电器控制命令
      */
     private fun sendJDQControl(bean: EnvAirControlBean) {
-        Thread.sleep(100)
+        Thread.sleep(30)
         bean.isSend = true
         sendBean = bean
         when (currentJDQ.name) {
@@ -470,7 +483,7 @@ class EnvAirActivity : BaseTouchActivity() {
      * 通过串口发送命令
      */
     private fun sendSerial(msg: String) {
-        var intent = Intent()
+        val intent = Intent()
         intent.putExtra("data", "send")
         intent.putExtra("msg", msg)
         Logger.d("EmvAorActivity发送串口数据=$msg")
@@ -961,6 +974,9 @@ class EnvAirActivity : BaseTouchActivity() {
             if (isCryogen) {//正在启动，将其关闭
                 recordingBtnState(Constants.BTN_STATE_COLD, 1)
                 ZL(false)
+                if(!isHeating){
+                    tempControlView.setRingColor(Color.parseColor("#7E7D7D"))
+                }
             } else {//未启动，将其打开
                 recordingBtnState(Constants.BTN_STATE_COLD, 0)
                 recordingBtnState(Constants.BTN_STATE_HEAT, 1)
@@ -973,6 +989,9 @@ class EnvAirActivity : BaseTouchActivity() {
             if (isHeating) {//正在启动，将其关闭
                 recordingBtnState(Constants.BTN_STATE_HEAT, 1)
                 ZR(false)
+                if(!isCryogen){
+                    tempControlView.setRingColor(Color.parseColor("#7E7D7D"))
+                }
             } else {//未启动，将其打开
                 recordingBtnState(Constants.BTN_STATE_COLD, 1)
                 recordingBtnState(Constants.BTN_STATE_HEAT, 0)
@@ -1265,12 +1284,6 @@ class EnvAirActivity : BaseTouchActivity() {
 
         btnCSBean.isOpen = false
         sendJDQControl(btnCSBean)
-
-//        if (SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_LN, 0) == 0 &&
-//            SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_SD, 0) == 0
-//        ) {
-//            XFAllOff()
-//        }
     }
 
     /**
@@ -1453,6 +1466,10 @@ class EnvAirActivity : BaseTouchActivity() {
             } else if (intent.action == CommonConfig.ACTION_ENVAIRACTIVITY_SEND_JDQSEARCH) {//发送寄电器查询命令
                 buffer.delete(0, buffer.length)//更新下数据存储器，防止出现骚问题
                 sendJDQSearch()
+            } else if (intent.action == CommonConfig.ACTION_BGCKGROUND_IMG_CHANGE) {//发送寄电器查询命令
+                //设置背景图片
+                val imgId=SharedPreferencesUtil.getInstance(this@EnvAirActivity).getData(Constants.IMGID,R.mipmap.bg2) as Int
+                layout_total.setBackgroundResource(imgId)
             }
         }
     }

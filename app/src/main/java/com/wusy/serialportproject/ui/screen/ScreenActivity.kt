@@ -137,13 +137,13 @@ class ScreenActivity : BaseTouchActivity() {
             add(ScreenAdapter.ScreenBean().apply {
                 name = "甲醛"
                 count = "0"
-                unit = "mg/m3"
+                unit = "mg/m³"
                 status = "获取中..."
             })
             add(ScreenAdapter.ScreenBean().apply {
                 name = "TVOC"
                 count = "0"
-                unit = "mg/m3"
+                unit = "mg/m³"
                 status = "获取中..."
             })
         }

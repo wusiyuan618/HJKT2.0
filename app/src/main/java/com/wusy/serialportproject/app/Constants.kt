@@ -71,7 +71,8 @@ class Constants {
         //记录维保时间
         const val WBTIME="WBTIME"
         const val NESTWBTIME="NESTWBTIME"
-
+        //记录背景图片
+        const val IMGID="IMGID"
         /**
          * -------------------------------------------------
          */

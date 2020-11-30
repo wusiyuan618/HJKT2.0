@@ -10,8 +10,8 @@ android {
         applicationId "com.wusy.serialportproject"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 22
-        versionName "1.1.22"
+        versionCode 27
+        versionName "1.1.27"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
@@ -71,5 +71,8 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     implementation 'com.haibin:calendarview:3.6.6'
     implementation 'com.google.code.gson:gson:2.8.5'
-
+    implementation('io.socket:socket.io-client:0.9.0') {
+        // 不同sdk中引用同一个库，排除掉其中一个
+        configurations { compile.exclude group: "org.json", module: "json" }
+    }
 }

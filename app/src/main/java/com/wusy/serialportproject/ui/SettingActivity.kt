@@ -1,16 +1,18 @@
 package com.wusy.serialportproject.ui
 
-import android.support.v4.app.FragmentManager
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import com.wusy.serialportproject.R
 import com.wusy.serialportproject.adapter.SettingAdapter
 import com.wusy.serialportproject.app.BaseTouchActivity
+import com.wusy.serialportproject.app.Constants
 import com.wusy.serialportproject.bean.SettingBean
-import com.wusy.serialportproject.popup.NumberBoxPopup
-import com.wusy.wusylibrary.base.BaseActivity
-import com.wusy.wusylibrary.base.BaseRecyclerAdapter
+import com.wusy.serialportproject.util.CommonConfig
+import com.wusy.wusylibrary.util.SharedPreferencesUtil
 import kotlinx.android.synthetic.main.activity_setting.*
+import kotlinx.android.synthetic.main.activity_setting.layout_total
 
 class SettingActivity: BaseTouchActivity(){
     lateinit var adapter:SettingAdapter
@@ -27,6 +29,9 @@ class SettingActivity: BaseTouchActivity(){
         adapter.list=createList()
         adapter.fm=supportFragmentManager
         recyclerView.adapter=adapter
+        val imgId= SharedPreferencesUtil.getInstance(this).getData(Constants.IMGID,R.mipmap.bg2) as Int
+        layout_total.setBackgroundResource(imgId)
+        initBroadCast()
     }
 
     override fun getContentViewId(): Int {
@@ -54,6 +59,12 @@ class SettingActivity: BaseTouchActivity(){
             ft.add(R.id.fragmentBox,this.fragment as TempCodeFragment,"TempCodeFragment")
         })
         list.add(SettingBean().apply {
+            this.title="背景设置"
+            this.isSelect=false
+            this.fragment=BackGroundFragment()
+            ft.add(R.id.fragmentBox,this.fragment as BackGroundFragment,"BackGroundFragment")
+        })
+        list.add(SettingBean().apply {
             this.title="维保"
             this.isSelect=false
             this.fragment=RepairFragment()
@@ -70,5 +81,20 @@ class SettingActivity: BaseTouchActivity(){
         ft.commit()
         return list
     }
+    private fun initBroadCast() {
+        val boradCast = SettingBoradCast()
+        val actionList = ArrayList<String>()
+        actionList.add(CommonConfig.ACTION_BGCKGROUND_IMG_CHANGE)
+        addBroadcastAction(actionList, boradCast)
+    }
+    internal inner class SettingBoradCast : BroadcastReceiver() {
 
+        override fun onReceive(context: Context, intent: Intent) {
+            if (intent.action == CommonConfig.ACTION_BGCKGROUND_IMG_CHANGE) {//发送寄电器查询命令
+                //设置背景图片
+                val imgId=SharedPreferencesUtil.getInstance(this@SettingActivity).getData(Constants.IMGID,R.mipmap.bg2) as Int
+                layout_total.setBackgroundResource(imgId)
+            }
+        }
+    }
 }
