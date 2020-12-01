@@ -1,6 +1,8 @@
 package com.wusy.serialportproject.socket;
 
+import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
+import com.wusy.serialportproject.bean.SocketPackage;
 import com.wusy.serialportproject.util.InterAddressUtil;
 
 import java.net.URISyntaxException;
@@ -12,7 +14,7 @@ import io.socket.client.Socket;
 public class SocketHelper {
     private static SocketHelper socketHelper;
     private Socket mSocket;
-    public static String SOCKET_HJKT_STR = "hjl-hv";
+    private String SOCKET_HJKT_STR = "hjl-hv";
     public OnReceiveListener onReceiveListener;
     private String macAddress;
 
@@ -20,7 +22,9 @@ public class SocketHelper {
         macAddress = InterAddressUtil.getMacAddress();
         if (mSocket == null) {
             try {
-                mSocket = IO.socket("http://192.168.1.228:9206/");
+                IO.Options opts = new IO.Options();
+                opts.timeout=10*1000;
+                mSocket = IO.socket("http://192.168.1.228:9206/",opts);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -35,7 +39,12 @@ public class SocketHelper {
     }
 
     private void connectInit() {
-        mSocket.emit(SOCKET_HJKT_STR, macAddress);
+        SocketPackage socketPackage=new SocketPackage();
+        socketPackage.setContent(macAddress);
+        socketPackage.setDescription("连接成功，发送mac地址");
+        socketPackage.setType("1");
+        socketPackage.setIntent("register");
+        send(new Gson().toJson(socketPackage));
     }
 
     /**
@@ -80,10 +89,20 @@ public class SocketHelper {
             addListensEvent();
             connect();
         });
+        mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, args -> {
+            Logger.i("Socket Connect TimeOut");
+            addListensEvent();
+            connect();
+        });
     }
 
-    public void sendTest(){
-        mSocket.emit(SOCKET_HJKT_STR, "ceshi");
+    public void send(String str){
+        if(mSocket.connected()){
+            mSocket.emit(SOCKET_HJKT_STR, str);
+        }else{
+           Logger.e("Socket未能连接,无法发送");
+        }
+
     }
 
     public interface OnReceiveListener {

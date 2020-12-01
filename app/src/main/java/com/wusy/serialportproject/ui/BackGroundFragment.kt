@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import com.wusy.serialportproject.app.Constants
 import com.wusy.serialportproject.util.CommonConfig
 import com.wusy.wusylibrary.base.BaseFragment
 import com.wusy.wusylibrary.base.BaseRecyclerAdapter
+import com.wusy.wusylibrary.util.ImageLoaderUtil
 import com.wusy.wusylibrary.util.SharedPreferencesUtil
 
 
@@ -42,6 +44,7 @@ class BackGroundFragment : BaseFragment() {
         })
         imgRecyclerView.layoutManager = GridLayoutManager(activity,3)
         imgRecyclerView.adapter = adapter
+
     }
 
     override fun getContentViewId(): Int {

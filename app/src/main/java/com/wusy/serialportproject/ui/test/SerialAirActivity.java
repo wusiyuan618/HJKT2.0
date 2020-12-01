@@ -123,12 +123,12 @@ public class SerialAirActivity extends Activity {
                     logOnTv("获取的环境检测仪的数据"+msg.obj);
                     EnvironmentalDetector enD=new EnvironmentalDetector(msg.obj.toString(), new EnvQ3());
                     logOnTv("---------经分析--------\n"+
-                            "PM2.5="+enD.getPM2_5()+"\n"+
+                            "PM2.5="+enD.getPM25()+"\n"+
                             "温度="+enD.getTemp()+"\n"+
                             "湿度="+enD.getHumidity()+"\n"+
                             "CO2="+enD.getCO2()+"\n"+
                             "TVOC="+enD.getTvoc()+"\n"+
-                            "室外PM2.5="+enD.getPM2_5OutDoor()+"\n"+
+                            "室外PM2.5="+enD.getPM25OutDoor()+"\n"+
                             "甲醛="+enD.getFormaldehyde()+"\n"+
                             "-----------------------");
                     break;

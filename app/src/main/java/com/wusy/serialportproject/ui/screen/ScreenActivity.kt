@@ -213,21 +213,21 @@ class ScreenActivity : BaseTouchActivity() {
                     }
                 }
                 "PM2.5" -> {
-                    item.count = ed.pM2_5.toString()
+                    item.count = ed.pM25.toString()
                     when {
-                        ed.pM2_5 in 0..35 -> {
+                        ed.pM25 in 0..35 -> {
                             item.color = "#059E04"
                             item.status = "优"
                         }
-                        ed.pM2_5 in 36..50 -> {
+                        ed.pM25 in 36..50 -> {
                             item.color = "#FFBB14"
                             item.status = "良"
                         }
-                        ed.pM2_5 in 51..75 -> {
+                        ed.pM25 in 51..75 -> {
                             item.color = "#F59327"
                             item.status = "轻度污染"
                         }
-                        ed.pM2_5 in 76..125 -> {
+                        ed.pM25 in 76..125 -> {
                             item.color = "#CD5C35"
                             item.status = "中度污染"
                         }

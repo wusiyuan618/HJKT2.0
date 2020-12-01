@@ -21,8 +21,10 @@ import com.orhanobut.logger.Logger
 import com.wusy.serialportproject.R
 import com.wusy.serialportproject.app.BaseTouchActivity
 import com.wusy.serialportproject.app.Constants
+import com.wusy.serialportproject.bean.ControlStatusBean
 import com.wusy.serialportproject.bean.EnvironmentalDetector
 import com.wusy.serialportproject.bean.EnvAirControlBean
+import com.wusy.serialportproject.bean.SocketPackage
 import com.wusy.serialportproject.devices.*
 import com.wusy.serialportproject.socket.SocketHelper
 import com.wusy.serialportproject.ui.screen.ScreenActivity
@@ -137,7 +139,6 @@ class EnvAirActivity : BaseTouchActivity() {
     override fun init() {
         requestPermissions()
         initView()
-
         initBroadCast()
         initThread()
         initTestDevices()
@@ -200,12 +201,14 @@ class EnvAirActivity : BaseTouchActivity() {
 
             }
         })
-        var options = RequestOptions()
+        val options = RequestOptions()
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
         Glide.with(this).load(R.mipmap.aqi).apply(options).into(ivAirQualityGif)
 
         rlSetting.setOnClickListener {
+            showLoadImage()
             navigateTo(SettingActivity::class.java)
+            hideLoadImage()
         }
         rlRepair.setOnClickListener {
             startActivity(Intent().apply {
@@ -221,7 +224,6 @@ class EnvAirActivity : BaseTouchActivity() {
         //设置socket
         socketHelper=SocketHelper.getInstance()
         socketHelper.onReceiveListener= SocketHelper.OnReceiveListener {
-            Logger.i("socket-it")
             Logger.i("socket$it")
         }
         socketHelper.addListensEvent()
@@ -258,7 +260,6 @@ class EnvAirActivity : BaseTouchActivity() {
                 buffer.delete(0, buffer.length)//定时更新下数据存储器，防止出现骚问题
                 sendJDQSearch()
                 Thread.sleep(58 * 1000)
-                socketHelper.sendTest()
             }
         }).start()
         Thread(Runnable {
@@ -338,7 +339,7 @@ class EnvAirActivity : BaseTouchActivity() {
         Thread(Runnable {
             //这是一个每秒钟执行一次的时间线程
             while (true) {
-                var calendar = Calendar.getInstance()
+                val calendar = Calendar.getInstance()
                 runOnUiThread {
                     tvDate.text = calendar.get(Calendar.YEAR).toString() + "年" +
                             (calendar.get(Calendar.MONTH) + 1).toString() + "月" +
@@ -359,8 +360,9 @@ class EnvAirActivity : BaseTouchActivity() {
                     Logger.i("系统定时重启开始！！！")
                     sendBroadcast(Intent("HJL_ACTION_REBOOT"))
                 }
+
                 Thread.sleep(1000)
-                var updateTime = SharedPreferencesUtil.getInstance(this)
+                val updateTime = SharedPreferencesUtil.getInstance(this)
                     .getData(Constants.VALUEADDED_UPDATE_DATE_FILTER, "").toString()
                 if (updateTime != "") {
                     var time = SimpleDateFormat("yyyy-MM-dd").parse(updateTime).time
@@ -369,7 +371,7 @@ class EnvAirActivity : BaseTouchActivity() {
                             ivAirQualityGif.visibility = View.VISIBLE
                         }
                     } else {
-                        if ((Constants.curED?.pM2_5 ?: 0) < 75) {//将时间清空
+                        if ((Constants.curED?.pM25 ?: 0) < 75) {//将时间清空
                             lastHighPMTime = 0L
                             runOnUiThread {
                                 ivAirQualityGif.visibility = View.GONE
@@ -435,6 +437,18 @@ class EnvAirActivity : BaseTouchActivity() {
         }).start()
     }
 
+    /**
+     * 通过socket发送大屏状态信息至服务器
+     */
+    private fun sendAppControlStatus(){
+        val socketPackage=SocketPackage().apply {
+            this.content=ControlStatusBean(this@EnvAirActivity)
+            this.description="大屏实时状态数据，操作一次，发送一次"
+            this.type="1"
+            this.intent="ControlStatus"
+        }
+        socketHelper.send(Gson().toJson(socketPackage))
+    }
     private fun initBroadCast() {
         boradCast = EnvAirBoradCast()
         var actionList = ArrayList<String>()
@@ -529,7 +543,7 @@ class EnvAirActivity : BaseTouchActivity() {
         Constants.curED = enD
         tvTempCount.text = enD.temp.toString()
         tvHumidityCount.text = enD.humidity.toString()
-        tvAirQualityCount.text = enD.pM2_5.toString()
+        tvAirQualityCount.text = enD.pM25.toString()
         sendBroadcast(Intent().apply {
             action = CommonConfig.ACTION_SYSTEMTEST_LOG
             putExtra("log", "EmvAorActivity发送串口数据=${currentEnv.log}")
@@ -561,10 +575,18 @@ class EnvAirActivity : BaseTouchActivity() {
                     intent.putExtra("data", msg.obj.toString())
                     sendBroadcast(intent)
                     val enD = EnvironmentalDetector(msg.obj.toString(), currentEnv)
+                    //给服务器发送温度数据
+                    val socketPackage=SocketPackage().apply {
+                        this.content=enD
+                        this.description="温度传感器数据，一分钟一次"
+                        this.type="1"
+                        this.intent="EnvironmentalDetector"
+                    }
+                    socketHelper.send(Gson().toJson(socketPackage))
                     Constants.curED = enD
                     tvTempCount.text = enD.temp.toString()
                     tvHumidityCount.text = enD.humidity.toString()
-                    tvAirQualityCount.text = enD.pM2_5.toString()
+                    tvAirQualityCount.text = enD.pM25.toString()
                     sendBroadcast(Intent().apply {
                         action = CommonConfig.ACTION_SYSTEMTEST_LOG
                         putExtra("log", "EmvAorActivity发送串口数据=${currentEnv.log}")
@@ -982,6 +1004,7 @@ class EnvAirActivity : BaseTouchActivity() {
                 recordingBtnState(Constants.BTN_STATE_HEAT, 1)
                 ZL(true)
             }
+            sendAppControlStatus()
         }
         ivHeat.setOnClickListener {
             if (!isCanClick()) return@setOnClickListener
@@ -997,6 +1020,7 @@ class EnvAirActivity : BaseTouchActivity() {
                 recordingBtnState(Constants.BTN_STATE_HEAT, 0)
                 ZR(true)
             }
+            sendAppControlStatus()
         }
         /**
          * 加湿
@@ -1030,6 +1054,7 @@ class EnvAirActivity : BaseTouchActivity() {
             } else {
                 clickON()
             }
+            sendAppControlStatus()
         }
         /**
          * 离家按钮
@@ -1042,7 +1067,7 @@ class EnvAirActivity : BaseTouchActivity() {
             } else {
                 clickLJ()
             }
-
+            sendAppControlStatus()
         }
         /**
          * 节能按钮
@@ -1055,6 +1080,7 @@ class EnvAirActivity : BaseTouchActivity() {
             } else {
                 clickJN()
             }
+            sendAppControlStatus()
         }
         /**
          * 新风
