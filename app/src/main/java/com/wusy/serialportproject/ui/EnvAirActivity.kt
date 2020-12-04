@@ -224,7 +224,29 @@ class EnvAirActivity : BaseTouchActivity() {
         //设置socket
         socketHelper=SocketHelper.getInstance()
         socketHelper.onReceiveListener= SocketHelper.OnReceiveListener {
-            Logger.i("socket$it")
+            Logger.i("Socket Receive:$it")
+            val data=Gson().fromJson<SocketPackage>(it,SocketPackage::class.java)
+            when(data.intent){
+                "制冷"->{
+                    ZL(true)
+                }
+                "制热"->{
+                    ZR(true)
+                }
+                "开关"->{
+                    clickON()
+                    clickOFF()
+                }
+                "离家"->{
+                    clickLJ()
+                }
+                "节能"->{
+                    clickJN()
+                }
+                "日常"->{
+                    clickModeNormal()
+                }
+            }
         }
         socketHelper.addListensEvent()
         socketHelper.connect()

@@ -86,18 +86,19 @@ public class SocketHelper {
         mSocket.on("reconnect_failed", args -> Logger.e("Socket Reconnect Failed"));
         mSocket.on("reconnect", args -> {
             Logger.i("Socket Reconnect");
-            addListensEvent();
+//            addListensEvent();
             connect();
         });
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, args -> {
             Logger.i("Socket Connect TimeOut");
-            addListensEvent();
+//            addListensEvent();
             connect();
         });
     }
 
     public void send(String str){
         if(mSocket.connected()){
+            Logger.i("Socket发送数据:"+str);
             mSocket.emit(SOCKET_HJKT_STR, str);
         }else{
            Logger.e("Socket未能连接,无法发送");
