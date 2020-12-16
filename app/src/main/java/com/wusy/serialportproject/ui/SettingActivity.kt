@@ -46,6 +46,7 @@ class SettingActivity : BaseTouchActivity() {
     private fun createList(): ArrayList<SettingBean> {
         val list = ArrayList<SettingBean>()
         val ft = supportFragmentManager.beginTransaction()
+
         list.add(SettingBean().apply {
             this.title = "屏保时间"
             this.isSelect = true
@@ -55,6 +56,12 @@ class SettingActivity : BaseTouchActivity() {
                 this.fragment as ScreenSettingFragment,
                 "ScreenSettingFragment"
             )
+        })
+        list.add(SettingBean().apply {
+            this.title = "App账号管理"
+            this.isSelect = false
+            this.fragment = RegisterFragment()
+            ft.add(R.id.fragmentBox, this.fragment as RegisterFragment, "RegisterFragment")
         })
         list.add(SettingBean().apply {
             this.title = "环境设置"
@@ -80,6 +87,7 @@ class SettingActivity : BaseTouchActivity() {
             this.fragment = RepairFragment()
             ft.add(R.id.fragmentBox, this.fragment as RepairFragment, "RepairFragment")
         })
+
         list.add(SettingBean().apply {
             this.title = "系统设置"
             this.isSelect = false

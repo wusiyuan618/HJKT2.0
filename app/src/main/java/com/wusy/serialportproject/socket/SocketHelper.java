@@ -1,8 +1,12 @@
 package com.wusy.serialportproject.socket;
 
+import android.content.Context;
+import android.content.Intent;
+
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.wusy.serialportproject.bean.SocketPackage;
+import com.wusy.serialportproject.util.CommonConfig;
 import com.wusy.serialportproject.util.InterAddressUtil;
 
 import java.net.URISyntaxException;
@@ -24,7 +28,8 @@ public class SocketHelper {
             try {
                 IO.Options opts = new IO.Options();
                 opts.timeout=10*1000;
-                mSocket = IO.socket("http://192.168.1.228:9206/",opts);
+                mSocket = IO.socket("http://39.98.255.74:9206/",opts);
+                addListensEvent();
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             }
@@ -64,7 +69,7 @@ public class SocketHelper {
     /**
      * 添加监听
      */
-    public void addListensEvent() {
+    private void addListensEvent() {
         mSocket.on(SOCKET_HJKT_STR, args -> {
             if (onReceiveListener != null) onReceiveListener.receive(args[0].toString());
             else Logger.e("Socket没有接收消息的监听，收到了服务器的消息:"+args);
@@ -86,22 +91,30 @@ public class SocketHelper {
         mSocket.on("reconnect_failed", args -> Logger.e("Socket Reconnect Failed"));
         mSocket.on("reconnect", args -> {
             Logger.i("Socket Reconnect");
-//            addListensEvent();
             connect();
         });
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, args -> {
             Logger.i("Socket Connect TimeOut");
-//            addListensEvent();
             connect();
         });
-    }
 
+    }
+    public boolean isConnected(){
+        return mSocket.connected();
+    }
+    public void send(String str, Context context){
+
+        Intent intent =new  Intent(CommonConfig.ACTION_SYSTEMTEST_LOG);
+        intent.putExtra("log", "\n----------------\nSocket发送数据:"+ str+"\n----------------\n");
+        context.sendBroadcast(intent);
+        send(str);
+    }
     public void send(String str){
         if(mSocket.connected()){
             Logger.i("Socket发送数据:"+str);
             mSocket.emit(SOCKET_HJKT_STR, str);
         }else{
-           Logger.e("Socket未能连接,无法发送");
+            Logger.e("Socket未能连接,无法发送");
         }
 
     }

@@ -7,7 +7,7 @@ import java.io.Serializable
  * Socket消息实体类
  */
 class SocketPackage : Serializable {
-
+    var msgId: String? = null
     /**
      * 消息类型 1显示 2控制
      */

@@ -6,10 +6,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
+import android.os.Environment
 
 import android.os.Handler
 import android.os.Message
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -21,17 +22,15 @@ import com.orhanobut.logger.Logger
 import com.wusy.serialportproject.R
 import com.wusy.serialportproject.app.BaseTouchActivity
 import com.wusy.serialportproject.app.Constants
-import com.wusy.serialportproject.bean.ControlStatusBean
-import com.wusy.serialportproject.bean.EnvironmentalDetector
-import com.wusy.serialportproject.bean.EnvAirControlBean
-import com.wusy.serialportproject.bean.SocketPackage
+import com.wusy.serialportproject.bean.*
 import com.wusy.serialportproject.devices.*
 import com.wusy.serialportproject.socket.SocketHelper
 import com.wusy.serialportproject.ui.screen.ScreenActivity
 import com.wusy.serialportproject.util.CommonConfig
+import com.wusy.serialportproject.util.InterAddressUtil
 import com.wusy.serialportproject.util.JDQType
-import com.wusy.serialportproject.util.SerialPortUtil
 import com.wusy.serialportproject.view.CirqueProgressControlView
+import com.wusy.wusylibrary.util.OkHttpUtil
 import com.wusy.wusylibrary.util.SharedPreferencesUtil
 import com.wusy.wusylibrary.util.permissions.PermissionsManager
 import com.wusy.wusylibrary.util.permissions.PermissionsResultAction
@@ -40,7 +39,11 @@ import kotlinx.android.synthetic.main.activity_item_envair_left.*
 import kotlinx.android.synthetic.main.activity_item_envair_center.*
 import kotlinx.android.synthetic.main.activity_item_envair_right.ivClod
 import kotlinx.android.synthetic.main.activity_item_envair_right.ivHeat
-import kotlinx.android.synthetic.main.activity_item_envair_right_new.*
+import okhttp3.Call
+import okhttp3.Response
+import org.json.JSONObject
+import java.io.File
+import java.io.IOException
 
 import java.text.SimpleDateFormat
 import java.util.*
@@ -197,8 +200,7 @@ class EnvAirActivity : BaseTouchActivity() {
                     SharedPreferencesUtil.getInstance(this@EnvAirActivity)
                         .saveData(Constants.LAST_TEMP, curTemp)
                 }
-
-
+                sendAppControlStatus()
             }
         })
         val options = RequestOptions()
@@ -219,36 +221,95 @@ class EnvAirActivity : BaseTouchActivity() {
         //状态重置
         restoreSwitchBtnState()
         //设置背景图片
-        val imgId=SharedPreferencesUtil.getInstance(this).getData(Constants.IMGID,R.mipmap.bg2) as Int
+        val imgId =
+            SharedPreferencesUtil.getInstance(this).getData(Constants.IMGID, R.mipmap.bg2) as Int
         layout_total.setBackgroundResource(imgId)
         //设置socket
-        socketHelper=SocketHelper.getInstance()
-        socketHelper.onReceiveListener= SocketHelper.OnReceiveListener {
+        socketHelper = SocketHelper.getInstance()
+        socketHelper.onReceiveListener = SocketHelper.OnReceiveListener {
             Logger.i("Socket Receive:$it")
-            val data=Gson().fromJson<SocketPackage>(it,SocketPackage::class.java)
-            when(data.intent){
-                "制冷"->{
-                    ZL(true)
+            sendBroadcast(Intent().apply {
+                action = CommonConfig.ACTION_SYSTEMTEST_LOG
+                putExtra("log", "\n----------------\nSocket Receive:$it\n----------------\n")
+            })
+            val data = Gson().fromJson<SocketPackage>(it, SocketPackage::class.java)
+            var receiveControlBean: ReceiveControlBean? = null
+            if (data.content != null) {
+                receiveControlBean = Gson().fromJson<ReceiveControlBean>(
+                    data.content.toString(),
+                    ReceiveControlBean::class.java
+                )
+            }
+
+            runOnUiThread {
+                when (data.intent) {
+                    "Cryogen" -> {
+                        if (receiveControlBean?.isOpen == true) {//正在启动，将其关闭
+                            recordingBtnState(Constants.BTN_STATE_COLD, 0)
+                            recordingBtnState(Constants.BTN_STATE_HEAT, 1)
+                            ZL(true)
+                        } else {//未启动，将其打开
+                            recordingBtnState(Constants.BTN_STATE_COLD, 1)
+                            ZL(false)
+                            if (!isHeating) {
+                                tempControlView.setRingColor(Color.parseColor("#7E7D7D"))
+                            }
+                        }
+                    }
+                    "Heating" -> {
+                        if (receiveControlBean?.isOpen == true) {//正在启动，将其关闭
+                            recordingBtnState(Constants.BTN_STATE_COLD, 1)
+                            recordingBtnState(Constants.BTN_STATE_HEAT, 0)
+                            ZR(true)
+                        } else {//未启动，将其打开
+                            recordingBtnState(Constants.BTN_STATE_HEAT, 1)
+                            ZR(false)
+                            if (!isCryogen) {
+                                tempControlView.setRingColor(Color.parseColor("#7E7D7D"))
+                            }
+                        }
+                    }
+                    "Switch" -> {
+                        if (receiveControlBean?.isOpen ?: false) {
+                            clickON()
+                        } else {
+                            clickOFF()
+                        }
+                    }
+                    "LJ" -> {
+                        clickLJ()
+                    }
+                    "JN" -> {
+                        clickJN()
+                    }
+                    "Normal" -> {
+                        clickModeNormal()
+                    }
+                    "SetTemp" -> {
+                        tempControlView.setProgress(receiveControlBean?.temp ?: 5)
+                        checkRingColor(receiveControlBean?.temp ?: 5)
+                        curTemp = receiveControlBean?.temp ?: 5
+                        SharedPreferencesUtil.getInstance(this@EnvAirActivity)
+                            .saveData(Constants.ENJOYTEMP, curTemp)
+                        if (SharedPreferencesUtil.getInstance(this@EnvAirActivity).getData(
+                                Constants.BTN_STATE_MODE,
+                                0
+                            ) == 0
+                        ) {
+                            SharedPreferencesUtil.getInstance(this@EnvAirActivity)
+                                .saveData(Constants.LAST_TEMP, curTemp)
+                        }
+                    }
+                    "ReBoot"->{
+                        sendBroadcast(Intent("HJL_ACTION_REBOOT"))
+                    }
+                    "SendLog"->{
+                        updateLog()
+                    }
                 }
-                "制热"->{
-                    ZR(true)
-                }
-                "开关"->{
-                    clickON()
-                    clickOFF()
-                }
-                "离家"->{
-                    clickLJ()
-                }
-                "节能"->{
-                    clickJN()
-                }
-                "日常"->{
-                    clickModeNormal()
-                }
+                sendAppControlStatus(data.msgId?:"")
             }
         }
-        socketHelper.addListensEvent()
         socketHelper.connect()
     }
 
@@ -324,7 +385,7 @@ class EnvAirActivity : BaseTouchActivity() {
                                 //调模式
 
                                 when {
-                                    tempBean.mode=="制冷" -> if(isCanClickByOpen()) {
+                                    tempBean.mode == "制冷" -> if (isCanClickByOpen()) {
                                         recordingBtnState(Constants.BTN_STATE_COLD, 0)
                                         recordingBtnState(Constants.BTN_STATE_HEAT, 1)
                                         runOnUiThread {
@@ -332,15 +393,15 @@ class EnvAirActivity : BaseTouchActivity() {
                                         }
 
                                     }
-                                    tempBean.mode=="制热" -> if(isCanClickByOpen()){
+                                    tempBean.mode == "制热" -> if (isCanClickByOpen()) {
                                         recordingBtnState(Constants.BTN_STATE_COLD, 1)
                                         recordingBtnState(Constants.BTN_STATE_HEAT, 0)
                                         runOnUiThread {
                                             ZR(true)
                                         }
                                     }
-                                    tempBean.mode=="通风" -> {
-                                        if(isCanClickByOpen()){
+                                    tempBean.mode == "通风" -> {
+                                        if (isCanClickByOpen()) {
                                             recordingBtnState(Constants.BTN_STATE_COLD, 1)
                                             recordingBtnState(Constants.BTN_STATE_HEAT, 1)
                                             runOnUiThread {
@@ -462,15 +523,22 @@ class EnvAirActivity : BaseTouchActivity() {
     /**
      * 通过socket发送大屏状态信息至服务器
      */
-    private fun sendAppControlStatus(){
-        val socketPackage=SocketPackage().apply {
-            this.content=ControlStatusBean(this@EnvAirActivity)
-            this.description="大屏实时状态数据，操作一次，发送一次"
-            this.type="1"
-            this.intent="ControlStatus"
-        }
-        socketHelper.send(Gson().toJson(socketPackage))
+    private fun sendAppControlStatus() {
+        sendAppControlStatus("")
     }
+    private fun sendAppControlStatus(msgId: String) {
+        val socketPackage = SocketPackage().apply {
+            this.content = ControlStatusBean(this@EnvAirActivity).apply {
+                temp= curTemp.toString()
+            }
+            this.description = "大屏实时状态数据，操作一次，发送一次"
+            this.type = "1"
+            this.intent = "ControlStatus"
+            this.msgId=msgId
+        }
+        socketHelper.send(Gson().toJson(socketPackage),this)
+    }
+
     private fun initBroadCast() {
         boradCast = EnvAirBoradCast()
         var actionList = ArrayList<String>()
@@ -559,8 +627,8 @@ class EnvAirActivity : BaseTouchActivity() {
     /**
      * 做一个测试数据
      */
-    private fun initTestDevices(){
-        if(currentEnv !is TextEnvDevice) return
+    private fun initTestDevices() {
+        if (currentEnv !is TextEnvDevice) return
         val enD = EnvironmentalDetector("", currentEnv)
         Constants.curED = enD
         tvTempCount.text = enD.temp.toString()
@@ -585,6 +653,7 @@ class EnvAirActivity : BaseTouchActivity() {
             Logger.i("已获取环境数据，但空调未开机")
         }
     }
+
     private val handler = @SuppressLint("HandlerLeak")
     object : Handler() {
         override fun handleMessage(msg: Message) {
@@ -593,18 +662,18 @@ class EnvAirActivity : BaseTouchActivity() {
                 0, 3 -> {//环境检测仪获取到的数据
                     Logger.d("获取的环境检测仪的数据" + msg.obj)
                     //将确定是环境探测器的数据通过广播发出去,并且存储全局数据。方便屏保使用
-                    var intent = Intent(CommonConfig.ACTION_ENVIRONMENTALDETECOTOR_DATA)
+                    val intent = Intent(CommonConfig.ACTION_ENVIRONMENTALDETECOTOR_DATA)
                     intent.putExtra("data", msg.obj.toString())
                     sendBroadcast(intent)
                     val enD = EnvironmentalDetector(msg.obj.toString(), currentEnv)
                     //给服务器发送温度数据
-                    val socketPackage=SocketPackage().apply {
-                        this.content=enD
-                        this.description="温度传感器数据，一分钟一次"
-                        this.type="1"
-                        this.intent="EnvironmentalDetector"
+                    val socketPackage = SocketPackage().apply {
+                        this.content = enD
+                        this.description = "温度传感器数据，一分钟一次"
+                        this.type = "1"
+                        this.intent = "EnvironmentalDetector"
                     }
-                    socketHelper.send(Gson().toJson(socketPackage))
+                    socketHelper.send(Gson().toJson(socketPackage),this@EnvAirActivity)
                     Constants.curED = enD
                     tvTempCount.text = enD.temp.toString()
                     tvHumidityCount.text = enD.humidity.toString()
@@ -681,12 +750,13 @@ class EnvAirActivity : BaseTouchActivity() {
             }
         }
     }
-    private fun checkRingColor(ringTemp:Int){
+
+    private fun checkRingColor(ringTemp: Int) {
         if (isCryogen) {
             if (Constants.curED != null && ringTemp > Constants.curED!!.temp) {
                 //不制冷的时候把按钮颜色换了
                 tempControlView.setRingColor(Color.parseColor("#7E7D7D"))
-            }else{
+            } else {
                 tempControlView.setRingColor(Color.parseColor("#2793ff"))
             }
         }
@@ -694,11 +764,12 @@ class EnvAirActivity : BaseTouchActivity() {
             if (Constants.curED != null && ringTemp < Constants.curED!!.temp) {
                 //不制热的时候把按钮颜色换了
                 tempControlView.setRingColor(Color.parseColor("#7E7D7D"))
-            }else{
+            } else {
                 tempControlView.setRingColor(Color.parseColor("#eb4f39"))
             }
         }
     }
+
     /**
      * 自动制冷
      */
@@ -1018,7 +1089,7 @@ class EnvAirActivity : BaseTouchActivity() {
             if (isCryogen) {//正在启动，将其关闭
                 recordingBtnState(Constants.BTN_STATE_COLD, 1)
                 ZL(false)
-                if(!isHeating){
+                if (!isHeating) {
                     tempControlView.setRingColor(Color.parseColor("#7E7D7D"))
                 }
             } else {//未启动，将其打开
@@ -1034,7 +1105,7 @@ class EnvAirActivity : BaseTouchActivity() {
             if (isHeating) {//正在启动，将其关闭
                 recordingBtnState(Constants.BTN_STATE_HEAT, 1)
                 ZR(false)
-                if(!isCryogen){
+                if (!isCryogen) {
                     tempControlView.setRingColor(Color.parseColor("#7E7D7D"))
                 }
             } else {//未启动，将其打开
@@ -1090,6 +1161,7 @@ class EnvAirActivity : BaseTouchActivity() {
                 clickLJ()
             }
             sendAppControlStatus()
+
         }
         /**
          * 节能按钮
@@ -1516,7 +1588,10 @@ class EnvAirActivity : BaseTouchActivity() {
                 sendJDQSearch()
             } else if (intent.action == CommonConfig.ACTION_BGCKGROUND_IMG_CHANGE) {//发送寄电器查询命令
                 //设置背景图片
-                val imgId=SharedPreferencesUtil.getInstance(this@EnvAirActivity).getData(Constants.IMGID,R.mipmap.bg2) as Int
+                val imgId = SharedPreferencesUtil.getInstance(this@EnvAirActivity).getData(
+                    Constants.IMGID,
+                    R.mipmap.bg2
+                ) as Int
                 layout_total.setBackgroundResource(imgId)
             }
         }
@@ -1585,5 +1660,57 @@ class EnvAirActivity : BaseTouchActivity() {
 
             }
         }
+    }
+    /**
+     * 上传日志
+     *  最新日志下载地址
+     *  https://www.hjlapp.com/ows-worker/logs/LogsByWusyLib_0.log
+     */
+    private fun updateLog() {
+        Logger.i("-----------------设备信息------------------")
+        Logger.i("设备制造商：" + Build.MANUFACTURER)
+        Logger.i("设备品牌：" + Build.BRAND)
+        Logger.i("设备型号：" + Build.MODEL)
+        Logger.i("系统版本：" + Build.VERSION.RELEASE)
+        Logger.i("mac地址：" + InterAddressUtil.getMacAddress())
+        Logger.i("-------------------------------------------")
+        val url = "https://www.hjlapp.com/cgProgramApi/fileUpload/uploadFile?"
+        val file =
+            File(Environment.getExternalStorageDirectory().toString() + "/logger/LogsByWusyLib_0.log")
+        val maps = HashMap<String, String>()
+        maps["type"] = "1"
+        Thread.sleep(1000)
+        val macAddress= InterAddressUtil.getMacAddress()
+        OkHttpUtil.getInstance()
+            .upLoadFile(url, "file", file, maps, object : OkHttpUtil.ResultCallBack {
+                override fun failListener(call: Call?, e: IOException?, message: String?) {
+                    runOnUiThread {
+                        val socketPackage = SocketPackage().apply {
+                            this.content = "$macAddress-设备日志上传失败"
+                            this.description = "设备日志上传"
+                            this.type = "1"
+                            this.intent = "UpdateLog"
+                        }
+                        socketHelper.send(Gson().toJson(socketPackage),this@EnvAirActivity)
+                        hideLoadImage()
+                    }
+                }
+
+                override fun successListener(call: Call?, response: Response?) {
+                    runOnUiThread {
+                        var json = JSONObject(response!!.body()!!.string())
+                        if (json.getString("status") == "0"){
+                            val socketPackage = SocketPackage().apply {
+                                this.content = "$macAddress-设备日志上传成功"
+                                this.description = "设备日志上传"
+                                this.type = "1"
+                                this.intent = "UpdateLog"
+                            }
+                            socketHelper.send(Gson().toJson(socketPackage),this@EnvAirActivity)
+                        }
+                        hideLoadImage()
+                    }
+                }
+            })
     }
 }

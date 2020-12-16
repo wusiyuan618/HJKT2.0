@@ -15,6 +15,7 @@ import com.google.gson.Gson
 import com.orhanobut.logger.Logger
 import com.wusy.serialportproject.R
 import com.wusy.serialportproject.app.Constants
+import com.wusy.serialportproject.app.URLForOkHttp
 import com.wusy.serialportproject.popup.MakeSurePopup
 import com.wusy.serialportproject.popup.NumberEditPopup
 import com.wusy.serialportproject.util.DataUtils
@@ -227,7 +228,7 @@ class SystemSettingFragment : BaseFragment() {
 
     private fun requestVersion() {
         OkHttpUtil.getInstance()
-            .asynGet("https://www.hjlapp.com/cgProgramApi/version/getList?productType=12",
+            .asynGet(URLForOkHttp.requestVersionUpdate(),
                 object : OkHttpUtil.ResultCallBack {
                     override fun successListener(call: Call?, response: Response?) {
                         try {

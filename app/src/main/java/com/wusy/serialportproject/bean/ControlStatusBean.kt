@@ -25,7 +25,6 @@ class ControlStatusBean(context: Context){
     var temp=""
     var createTime=0L
     var macAddress=""
-
     init {
         val sp=SharedPreferencesUtil.getInstance(context)
         //开关状态
@@ -37,7 +36,7 @@ class ControlStatusBean(context: Context){
         heatingStatus=sp.getData(Constants.BTN_STATE_HEAT,1).toString()
 
         //温度状态
-        temp=sp.getData(Constants.LAST_TEMP,20).toString()
+        temp=sp.getData(Constants.ENJOYTEMP,20).toString()
         createTime=System.currentTimeMillis()
         macAddress= InterAddressUtil.getMacAddress()
     }

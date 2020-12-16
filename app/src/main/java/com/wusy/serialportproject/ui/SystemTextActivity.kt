@@ -8,6 +8,7 @@ import android.widget.ImageView
 import com.wusy.serialportproject.R
 import com.wusy.serialportproject.app.BaseTouchActivity
 import com.wusy.serialportproject.app.Constants
+import com.wusy.serialportproject.socket.SocketHelper
 import com.wusy.serialportproject.ui.screen.ScreenActivity
 import com.wusy.serialportproject.util.CommonConfig
 import com.wusy.wusylibrary.util.SharedPreferencesUtil
@@ -75,6 +76,13 @@ class SystemTextActivity: BaseTouchActivity() {
             finish()
         }
 
+        tvReConnectSocket.setOnClickListener {
+            SocketHelper.getInstance().disConnect()
+            SocketHelper.getInstance().connect()
+        }
+        tvIsConnected.setOnClickListener {
+            showToast("Socket连接状态：${SocketHelper.getInstance().isConnected}")
+        }
         tvLog.movementMethod = ScrollingMovementMethod.getInstance()
 
         addBroadcastAction(ArrayList<String>().apply {
@@ -116,6 +124,7 @@ class SystemTextActivity: BaseTouchActivity() {
                         imageViewList[i].setImageResource(R.mipmap.icon_light_open)
                     }else{
                         imageViewList[i].setImageResource(R.mipmap.icon_light_close)
+
                     }
                 }
             }

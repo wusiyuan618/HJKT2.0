@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:background="#292E33"
+    android:layout_marginTop="40dp"
+    android:layout_marginLeft="40dp"
+    android:orientation="vertical"
+    android:layout_marginRight="40dp"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="170dp">
+    <TextView
+        android:id="@+id/tvUserName"
+        android:textSize="24sp"
+        android:text="用户名：124565621"
+        android:textColor="#ffffff"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <RelativeLayout
+        android:id="@+id/rlPassWord"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tvPassWord"
+            android:textSize="24sp"
+            android:text="密码："
+            android:textColor="#ffffff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/tvPassWordNumber"
+            android:textSize="24sp"
+            android:layout_toRightOf="@id/tvPassWord"
+            android:text="125621"
+            android:textColor="#ffffff"
+            android:inputType="textPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/ivEye"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/btn_password_search"
+            android:layout_toRightOf="@id/tvPassWordNumber"
+            android:padding="10dp"
+            android:layout_width="40dp"
+            android:layout_height="32dp"/>
+
+    </RelativeLayout>
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/ivEdit"
+            android:layout_toLeftOf="@id/ivDelete"
+            android:layout_marginRight="30dp"
+            android:src="@mipmap/btn_password_edit"
+            android:padding="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+        <ImageView
+            android:id="@+id/ivDelete"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/btn_password_delete"
+            android:layout_marginRight="30dp"
+            android:padding="10dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"/>
+    </RelativeLayout>
+</LinearLayout>
