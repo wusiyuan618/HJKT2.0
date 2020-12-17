@@ -10,8 +10,8 @@ android {
         applicationId "com.wusy.serialportproject"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 28
-        versionName "1.1.28"
+        versionCode 29
+        versionName "1.1.29"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8

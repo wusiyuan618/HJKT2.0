@@ -11,6 +11,7 @@ import android.os.Environment
 
 import android.os.Handler
 import android.os.Message
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -22,6 +23,7 @@ import com.orhanobut.logger.Logger
 import com.wusy.serialportproject.R
 import com.wusy.serialportproject.app.BaseTouchActivity
 import com.wusy.serialportproject.app.Constants
+import com.wusy.serialportproject.app.URLForOkHttp
 import com.wusy.serialportproject.bean.*
 import com.wusy.serialportproject.devices.*
 import com.wusy.serialportproject.socket.SocketHelper
@@ -39,6 +41,7 @@ import kotlinx.android.synthetic.main.activity_item_envair_left.*
 import kotlinx.android.synthetic.main.activity_item_envair_center.*
 import kotlinx.android.synthetic.main.activity_item_envair_right.ivClod
 import kotlinx.android.synthetic.main.activity_item_envair_right.ivHeat
+import kotlinx.android.synthetic.main.activity_item_envair_right_new.*
 import okhttp3.Call
 import okhttp3.Response
 import org.json.JSONObject
@@ -218,6 +221,7 @@ class EnvAirActivity : BaseTouchActivity() {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             })
         }
+        getLoginCode(InterAddressUtil.getMacAddress())
         //状态重置
         restoreSwitchBtnState()
         //设置背景图片
@@ -575,7 +579,27 @@ class EnvAirActivity : BaseTouchActivity() {
             }
         }
     }
+    /**
+     * 获取登录码
+     */
+    fun getLoginCode(macAddress:String){
+        com.wusy.serialportproject.app.OkHttpUtil.getInstance()
+            .asynGet(URLForOkHttp.getAccountList(macAddress), object : com.wusy.serialportproject.app.OkHttpUtil.ResultCallBack {
+                override fun failListener(call: Call?, e: IOException?, message: String?) {
+                }
+                override fun successListener(call: Call?, response: Response?) {
+                    val json = response!!.body()!!.string()
+                    val bean = Gson().fromJson(
+                        json,
+                        RegisteBean::class.java
+                    )
+                    runOnUiThread {
+                        tvLoginCode.text = "登录码：${bean.data?.loginCode ?: ""}"
+                    }
+                }
 
+            })
+    }
     /**
      * 查询寄电器状态
      */

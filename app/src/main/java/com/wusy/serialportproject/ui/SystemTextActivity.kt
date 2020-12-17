@@ -11,6 +11,7 @@ import com.wusy.serialportproject.app.Constants
 import com.wusy.serialportproject.socket.SocketHelper
 import com.wusy.serialportproject.ui.screen.ScreenActivity
 import com.wusy.serialportproject.util.CommonConfig
+import com.wusy.serialportproject.util.InterAddressUtil
 import com.wusy.wusylibrary.util.SharedPreferencesUtil
 import kotlinx.android.synthetic.main.activity_system_test.*
 import java.text.SimpleDateFormat
@@ -81,7 +82,10 @@ class SystemTextActivity: BaseTouchActivity() {
             SocketHelper.getInstance().connect()
         }
         tvIsConnected.setOnClickListener {
-            showToast("Socket连接状态：${SocketHelper.getInstance().isConnected}")
+            showToast("Socket连接状态：${if(SocketHelper.getInstance().isConnected)"连接中" else "已断开"}")
+        }
+        tvMacAddress.setOnClickListener {
+            refreshLogView("macAddress:${InterAddressUtil.getMacAddress()}")
         }
         tvLog.movementMethod = ScrollingMovementMethod.getInstance()
 
@@ -124,7 +128,6 @@ class SystemTextActivity: BaseTouchActivity() {
                         imageViewList[i].setImageResource(R.mipmap.icon_light_open)
                     }else{
                         imageViewList[i].setImageResource(R.mipmap.icon_light_close)
-
                     }
                 }
             }
