@@ -58,7 +58,7 @@
                         android:layout_below="@id/ivReSet"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="40dp"
-                        android:text="恢复出厂设置"
+                        android:text="清理日志数据"
                         android:textColor="#FFFFFF"
                         android:textSize="30sp" />
                 </RelativeLayout>

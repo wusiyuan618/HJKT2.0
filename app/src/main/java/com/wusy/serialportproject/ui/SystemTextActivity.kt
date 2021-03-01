@@ -82,7 +82,7 @@ class SystemTextActivity: BaseTouchActivity() {
             SocketHelper.getInstance().connect()
         }
         tvIsConnected.setOnClickListener {
-            showToast("Socket连接状态：${if(SocketHelper.getInstance().isConnected)"连接中" else "已断开"}")
+            showToast("Socket连接状态：${if(SocketHelper.getInstance().isConnected)"已连接" else "已断开"}")
         }
         tvMacAddress.setOnClickListener {
             refreshLogView("macAddress:${InterAddressUtil.getMacAddress()}")

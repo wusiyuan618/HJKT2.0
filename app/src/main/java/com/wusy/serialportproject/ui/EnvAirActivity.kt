@@ -6,12 +6,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.os.Build
-import android.os.Environment
 
 import android.os.Handler
 import android.os.Message
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.bumptech.glide.Glide
@@ -32,7 +29,6 @@ import com.wusy.serialportproject.util.CommonConfig
 import com.wusy.serialportproject.util.InterAddressUtil
 import com.wusy.serialportproject.util.JDQType
 import com.wusy.serialportproject.view.CirqueProgressControlView
-import com.wusy.wusylibrary.util.OkHttpUtil
 import com.wusy.wusylibrary.util.SharedPreferencesUtil
 import com.wusy.wusylibrary.util.permissions.PermissionsManager
 import com.wusy.wusylibrary.util.permissions.PermissionsResultAction
@@ -44,8 +40,6 @@ import kotlinx.android.synthetic.main.activity_item_envair_right.ivHeat
 import kotlinx.android.synthetic.main.activity_item_envair_right_new.*
 import okhttp3.Call
 import okhttp3.Response
-import org.json.JSONObject
-import java.io.File
 import java.io.IOException
 
 import java.text.SimpleDateFormat
@@ -121,7 +115,7 @@ class EnvAirActivity : BaseTouchActivity() {
     private var nextXFIsOpen = false
     //上一次高PM2.5的时间
     private var lastHighPMTime = 0L
-
+    private lateinit var commonFunction:CommonFunction
     /**
      * 按钮实体
      */
@@ -182,6 +176,7 @@ class EnvAirActivity : BaseTouchActivity() {
     @SuppressLint("SetTextI18n")
     private fun initView() {
         initAllBtn()
+        commonFunction= CommonFunction()
         tempControlView.setProgressRange(minTemp, maxTemp)//可以在xml中指定，也可以在代码中设置
         curTemp = SharedPreferencesUtil.getInstance(this).getData(Constants.ENJOYTEMP, 25) as Int
         tempControlView.setProgress(curTemp)  //添加默认数据--注:不能超出范围
@@ -308,7 +303,10 @@ class EnvAirActivity : BaseTouchActivity() {
                         sendBroadcast(Intent("HJL_ACTION_REBOOT"))
                     }
                     "SendLog"->{
-                        updateLog()
+                        commonFunction.updateLog(this,null)
+                    }
+                    "cleanLog"->{
+                        commonFunction.cleanLog()
                     }
                 }
                 sendAppControlStatus(data.msgId?:"")
@@ -614,7 +612,7 @@ class EnvAirActivity : BaseTouchActivity() {
         val intent = Intent()
         intent.putExtra("data", "send")
         intent.putExtra("msg", msg)
-        Logger.d("EmvAorActivity发送串口数据=$msg")
+//        Logger.d("EmvAorActivity发送串口数据=$msg")
         intent.action = CommonConfig.SERIALPORTPROJECT_ACTION_SP_SERVICE
         sendBroadcast(intent)
 
@@ -684,7 +682,7 @@ class EnvAirActivity : BaseTouchActivity() {
             super.handleMessage(msg)
             when (msg.what) {
                 0, 3 -> {//环境检测仪获取到的数据
-                    Logger.d("获取的环境检测仪的数据" + msg.obj)
+//                    Logger.d("获取的环境检测仪的数据" + msg.obj)
                     //将确定是环境探测器的数据通过广播发出去,并且存储全局数据。方便屏保使用
                     val intent = Intent(CommonConfig.ACTION_ENVIRONMENTALDETECOTOR_DATA)
                     intent.putExtra("data", msg.obj.toString())
@@ -726,7 +724,7 @@ class EnvAirActivity : BaseTouchActivity() {
 
                 }
                 1 -> {
-                    Logger.d("获取的SCHIDERON寄电器状态的数据" + msg.obj)
+//                    Logger.d("获取的SCHIDERON寄电器状态的数据" + msg.obj)
                     val data = msg.obj.toString().substring(16, 18)
                     if (sendBean != null && sendBean.isSend) {
                         //如果有控制命令，则讲获取的数据转为二进制，更改为要发送的二进制，在转成16进制发送
@@ -743,7 +741,7 @@ class EnvAirActivity : BaseTouchActivity() {
                     }
                 }
                 2 -> {
-                    Logger.d("获取的ZZ-IO1600寄电器状态的数据" + msg.obj)
+//                    Logger.d("获取的ZZ-IO1600寄电器状态的数据" + msg.obj)
                     var praseList = (currentJDQ as ZZIO1600).parseStatusData(msg.obj.toString())
                     sendBroadcast(Intent().apply {
                         action = CommonConfig.ACTION_SYSTEMTEST_LOG
@@ -1684,57 +1682,5 @@ class EnvAirActivity : BaseTouchActivity() {
 
             }
         }
-    }
-    /**
-     * 上传日志
-     *  最新日志下载地址
-     *  https://www.hjlapp.com/ows-worker/logs/LogsByWusyLib_0.log
-     */
-    private fun updateLog() {
-        Logger.i("-----------------设备信息------------------")
-        Logger.i("设备制造商：" + Build.MANUFACTURER)
-        Logger.i("设备品牌：" + Build.BRAND)
-        Logger.i("设备型号：" + Build.MODEL)
-        Logger.i("系统版本：" + Build.VERSION.RELEASE)
-        Logger.i("mac地址：" + InterAddressUtil.getMacAddress())
-        Logger.i("-------------------------------------------")
-        val url = "https://www.hjlapp.com/cgProgramApi/fileUpload/uploadFile?"
-        val file =
-            File(Environment.getExternalStorageDirectory().toString() + "/logger/LogsByWusyLib_0.log")
-        val maps = HashMap<String, String>()
-        maps["type"] = "1"
-        Thread.sleep(1000)
-        val macAddress= InterAddressUtil.getMacAddress()
-        OkHttpUtil.getInstance()
-            .upLoadFile(url, "file", file, maps, object : OkHttpUtil.ResultCallBack {
-                override fun failListener(call: Call?, e: IOException?, message: String?) {
-                    runOnUiThread {
-                        val socketPackage = SocketPackage().apply {
-                            this.content = "$macAddress-设备日志上传失败"
-                            this.description = "设备日志上传"
-                            this.type = "1"
-                            this.intent = "UpdateLog"
-                        }
-                        socketHelper.send(Gson().toJson(socketPackage),this@EnvAirActivity)
-                        hideLoadImage()
-                    }
-                }
-
-                override fun successListener(call: Call?, response: Response?) {
-                    runOnUiThread {
-                        var json = JSONObject(response!!.body()!!.string())
-                        if (json.getString("status") == "0"){
-                            val socketPackage = SocketPackage().apply {
-                                this.content = "$macAddress-设备日志上传成功"
-                                this.description = "设备日志上传"
-                                this.type = "1"
-                                this.intent = "UpdateLog"
-                            }
-                            socketHelper.send(Gson().toJson(socketPackage),this@EnvAirActivity)
-                        }
-                        hideLoadImage()
-                    }
-                }
-            })
     }
 }

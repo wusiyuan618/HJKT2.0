@@ -13,7 +13,6 @@ import java.util.Enumeration;
  */
 
 public class InterAddressUtil {
-
     public static String loadFileAsString(String filePath) throws java.io.IOException{
         StringBuffer fileData = new StringBuffer(1000);
         BufferedReader reader = new BufferedReader(new FileReader(filePath));
