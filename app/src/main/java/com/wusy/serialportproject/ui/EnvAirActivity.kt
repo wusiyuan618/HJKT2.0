@@ -19,6 +19,7 @@ import com.google.gson.JsonParser
 import com.orhanobut.logger.Logger
 import com.wusy.serialportproject.R
 import com.wusy.serialportproject.app.BaseTouchActivity
+import com.wusy.serialportproject.app.CommonFunction
 import com.wusy.serialportproject.app.Constants
 import com.wusy.serialportproject.app.URLForOkHttp
 import com.wusy.serialportproject.bean.*
@@ -70,11 +71,11 @@ class EnvAirActivity : BaseTouchActivity() {
          */
         const val MODE_Humidification = 5
         /**
-         * 新风
+         * 通风
          */
         const val MODE_Hairdryer = 6
         /**
-         * 风阀 关、小、中、大
+         * 新风 关、小、中、大
          */
         const val MODE_Wind_Min = 7
         const val MODE_Wind_Mid = 8
@@ -115,7 +116,8 @@ class EnvAirActivity : BaseTouchActivity() {
     private var nextXFIsOpen = false
     //上一次高PM2.5的时间
     private var lastHighPMTime = 0L
-    private lateinit var commonFunction:CommonFunction
+    private lateinit var commonFunction: CommonFunction
+    private var lastEnvDeviceInfoTime=0L
     /**
      * 按钮实体
      */
@@ -302,11 +304,20 @@ class EnvAirActivity : BaseTouchActivity() {
                     "ReBoot"->{
                         sendBroadcast(Intent("HJL_ACTION_REBOOT"))
                     }
-                    "SendLog"->{
+                    "SystemSendLog"->{
                         commonFunction.updateLog(this,null)
                     }
-                    "cleanLog"->{
+                    "SystemCleanLog"->{
                         commonFunction.cleanLog()
+                    }
+                    "SystemUpdate"->{
+                        commonFunction.requestVersionToUpdate(this)
+                    }
+                    "StarSystemTextActivity"->{
+                        navigateTo(SystemTextActivity::class.java)
+                    }
+                    "StarEnvAirActivity"->{
+                        navigateTo(EnvAirActivity::class.java)
                     }
                 }
                 sendAppControlStatus(data.msgId?:"")
@@ -426,16 +437,14 @@ class EnvAirActivity : BaseTouchActivity() {
             while (true) {
                 val calendar = Calendar.getInstance()
                 runOnUiThread {
-                    tvDate.text = calendar.get(Calendar.YEAR).toString() + "年" +
-                            (calendar.get(Calendar.MONTH) + 1).toString() + "月" +
-                            calendar.get(Calendar.DAY_OF_MONTH).toString() + "日" + "      周" + calendar.get(
-                        Calendar.DAY_OF_WEEK
-                    )
                     tvTime.text =
                         SimpleDateFormat("hh:mm").format(calendar.time) + "  " + if (calendar.get(
                                 Calendar.AM_PM
                             ) == 1
                         ) "PM" else "AM"
+                    if(calendar.timeInMillis-lastEnvDeviceInfoTime>10*1000*60){//10分钟未收到环境传感器的信息
+                        tvPrompt.visibility=View.VISIBLE
+                    }
                 }
                 //定时重启
                 if (SimpleDateFormat("hh:mm:ss").format(calendar.time) == "04:00:00" && calendar.get(
@@ -450,7 +459,7 @@ class EnvAirActivity : BaseTouchActivity() {
                 val updateTime = SharedPreferencesUtil.getInstance(this)
                     .getData(Constants.VALUEADDED_UPDATE_DATE_FILTER, "").toString()
                 if (updateTime != "") {
-                    var time = SimpleDateFormat("yyyy-MM-dd").parse(updateTime).time
+                    val time = SimpleDateFormat("yyyy-MM-dd").parse(updateTime).time
                     if (time - calendar.timeInMillis > (1000L * 60L * 60L * 24L * 180L)) {//提示更换
                         runOnUiThread {
                             ivAirQualityGif.visibility = View.VISIBLE
@@ -647,6 +656,25 @@ class EnvAirActivity : BaseTouchActivity() {
     }
 
     /**
+     * 处于节能和离家模式
+     * 禁止制冷制热按钮触发
+     */
+
+    private fun isInModel():Boolean{
+        return when {
+            SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_MODE,0)==1 -> {
+                showToast("正处于离家模式")
+                true
+            }
+            SharedPreferencesUtil.getInstance(this).getData(Constants.BTN_STATE_MODE,0)==2 -> {
+                showToast("正处于节能模式")
+                true
+            }
+            else -> false
+        }
+    }
+
+    /**
      * 做一个测试数据
      */
     private fun initTestDevices() {
@@ -684,6 +712,8 @@ class EnvAirActivity : BaseTouchActivity() {
                 0, 3 -> {//环境检测仪获取到的数据
 //                    Logger.d("获取的环境检测仪的数据" + msg.obj)
                     //将确定是环境探测器的数据通过广播发出去,并且存储全局数据。方便屏保使用
+                    tvPrompt.visibility=View.INVISIBLE
+                    lastEnvDeviceInfoTime=System.currentTimeMillis()
                     val intent = Intent(CommonConfig.ACTION_ENVIRONMENTALDETECOTOR_DATA)
                     intent.putExtra("data", msg.obj.toString())
                     sendBroadcast(intent)
@@ -742,31 +772,40 @@ class EnvAirActivity : BaseTouchActivity() {
                 }
                 2 -> {
 //                    Logger.d("获取的ZZ-IO1600寄电器状态的数据" + msg.obj)
-                    var praseList = (currentJDQ as ZZIO1600).parseStatusData(msg.obj.toString())
+                    val praseList = (currentJDQ as ZZIO1600).parseStatusData(msg.obj.toString())
                     sendBroadcast(Intent().apply {
                         action = CommonConfig.ACTION_SYSTEMTEST_LOG
                         putExtra(
                             "log", "解析的ZZ-IO1600寄电器状态的数据=${praseList}\n" +
                                     "从0计数（寄电器从1计数）\n制冷=${MODE_Cryogen}\t制热=${MODE_Heating}\n" +
-                                    "除湿=${MODE_Dehumidification}\t加湿=${MODE_Humidification}\t新风=${MODE_Hairdryer}\n" +
-                                    "风阀大=${MODE_Wind_Max}\t风阀中=${MODE_Wind_Mid}\t风阀小=${MODE_Wind_Min}\t风阀关=${MODE_Wind_Off}"
+                                    "除湿=${MODE_Dehumidification}\t加湿=${MODE_Humidification}\t通风=${MODE_Hairdryer}\n" +
+                                    "新风大=${MODE_Wind_Max}\t新风中=${MODE_Wind_Mid}\t新风小=${MODE_Wind_Min}\t新风关=${MODE_Wind_Off}"
                         )
                     })
                     sendBroadcast(Intent().apply {
                         action = CommonConfig.ACTION_SYSTEMTEST_JDQ
                         putIntegerArrayListExtra("jdq", praseList)
                     })
-                    /**
-                     * 湿度开关状态检查
-                     */
-                    if (praseList[btnJSBean.switchIndex] == 1) {//加湿中
-                        btnJSBean.isOpen = true
-                        recordingBtnState(Constants.BTN_STATE_SD, 2)
-                    } else if (praseList[btnCSBean.switchIndex] == 1) {//除湿中
-                        btnCSBean.isOpen = true
-                        recordingBtnState(Constants.BTN_STATE_SD, 1)
-                    } else {//都关闭
-                        recordingBtnState(Constants.BTN_STATE_SD, 0)
+                    for (i in praseList.indices){
+                        if(i==MODE_Dehumidification+1&&praseList[i]==1){//除湿开
+                            ivSD.setImageResource(R.mipmap.icon_cs)
+                        }else if(i==MODE_Humidification+1&&praseList[i]==1){//加湿开
+                            ivSD.setImageResource(R.mipmap.icon_js)
+                        }else{
+                            ivSD.visibility=View.GONE
+                        }
+
+                        if(i==MODE_Wind_Max+1&&praseList[i]==1){//新风大
+                            ivFJ.setImageResource(R.mipmap.icon_fj_max)
+
+                        }else if(i==MODE_Wind_Mid+1&&praseList[i]==1){//新风中
+                            ivFJ.setImageResource(R.mipmap.icon_fj_mid)
+
+                        }else if(i==MODE_Wind_Min+1&&praseList[i]==1){//新风小
+                            ivFJ.setImageResource(R.mipmap.icon_fj_min)
+                        }else if(i==MODE_Wind_Off+1&&praseList[i]==1){//新风关
+                            ivFJ.visibility=View.GONE
+                        }
                     }
                 }
             }
@@ -1108,6 +1147,7 @@ class EnvAirActivity : BaseTouchActivity() {
         ivClod.setOnClickListener {
             if (!isCanClick()) return@setOnClickListener
             if (!isCanClickByOpen()) return@setOnClickListener
+            if(isInModel()) return@setOnClickListener
             if (isCryogen) {//正在启动，将其关闭
                 recordingBtnState(Constants.BTN_STATE_COLD, 1)
                 ZL(false)
@@ -1124,6 +1164,7 @@ class EnvAirActivity : BaseTouchActivity() {
         ivHeat.setOnClickListener {
             if (!isCanClick()) return@setOnClickListener
             if (!isCanClickByOpen()) return@setOnClickListener
+            if(isInModel()) return@setOnClickListener
             if (isHeating) {//正在启动，将其关闭
                 recordingBtnState(Constants.BTN_STATE_HEAT, 1)
                 ZR(false)
@@ -1600,8 +1641,8 @@ class EnvAirActivity : BaseTouchActivity() {
                 } else {//内循环
                     FJControlIn()
                 }
-            } else if (intent.action == CommonConfig.ACTION_ENVAIR_FJ_CONTORL) {//其他页面控制湿度开关
-                FJContorl(intent.getIntExtra("FJType", Constants.DEFAULT_XF_OUTTYPE))
+            } else if (intent.action == CommonConfig.ACTION_ENVAIR_FJ_CONTORL) {
+                FJContorl(intent.getIntExtra(Constants.FJType, Constants.DEFAULT_XF_OUTTYPE))
             } else if (intent.action == CommonConfig.ACTION_ENVAIRACTIVITY_SEND_ENVSEARCH) {//发送环境查询命令
                 buffer.delete(0, buffer.length)//更新下数据存储器，防止出现骚问题
                 sendSerial(currentEnv.SearchStatusCode)

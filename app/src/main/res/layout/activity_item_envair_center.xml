@@ -15,24 +15,23 @@
         android:textSize="24sp" />
 
     <TextView
-        android:id="@+id/roomName"
+        android:id="@+id/tvPrompt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvTime"
+        android:drawableLeft="@mipmap/images_info"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/roomName_marginTop"
-        android:text="客厅"
-        android:textColor="#FFFFFF"
-        android:textSize="40sp"
-        android:visibility="invisible" />
+        android:text="  环境传感器未连接"
+        android:textColor="#EC5A5A"
+        android:textSize="30sp" />
 
     <RelativeLayout
         android:id="@+id/rlTempView"
         android:layout_width="@dimen/rlTempView_wid"
         android:layout_height="@dimen/rlTempView_wid"
-        android:layout_below="@id/roomName"
+        android:layout_below="@id/tvPrompt"
         android:layout_centerHorizontal="true"
-
         android:layout_marginTop="@dimen/rlTempView_marginTop">
 
         <com.wusy.serialportproject.view.CirqueProgressControlView

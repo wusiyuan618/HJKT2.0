@@ -32,6 +32,16 @@ public class DownLoadApkUtil {
         showDialog(new DownLoadBroadCastReceiver(),content);
         Constant.Custom_DOWNLOADAPK_URL=path;
     }
+    public void startToUpdate(String path){
+        Constant.Custom_DOWNLOADAPK_URL=path;
+        ArrayList<String> actionList = new ArrayList<>();
+        actionList.add(Constant.DOWNLOAD_ACTION);
+        activity.addBroadcastAction(actionList, new DownLoadBroadCastReceiver());
+        Intent updateIntent = new Intent(activity,
+                UpdateService.class);
+        updateIntent.putExtra("app_name", "hjkt");
+        activity.startService(updateIntent);
+    }
     /***
      * 检查是否更新版本
      */

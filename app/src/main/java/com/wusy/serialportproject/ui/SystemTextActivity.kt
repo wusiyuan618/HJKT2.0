@@ -122,7 +122,7 @@ class SystemTextActivity: BaseTouchActivity() {
                 if(isReceiveLog) refreshLogView(intent.getStringExtra("log").toString())
             }
             if (intent.action == CommonConfig.ACTION_SYSTEMTEST_JDQ) {
-                var jdqList=intent.getIntegerArrayListExtra("jdq")
+                val jdqList=intent.getIntegerArrayListExtra("jdq")
                 for (i in jdqList.indices){
                     if(jdqList[i]==1){
                         imageViewList[i].setImageResource(R.mipmap.icon_light_open)

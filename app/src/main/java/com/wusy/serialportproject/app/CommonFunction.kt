@@ -1,4 +1,4 @@
-package com.wusy.serialportproject.ui
+package com.wusy.serialportproject.app
 
 import android.content.Context
 import android.content.pm.PackageManager
@@ -6,8 +6,8 @@ import android.os.Build
 import android.os.Environment
 import android.util.Log
 import com.google.gson.Gson
+import com.orhanobut.logger.LogAdapter
 import com.orhanobut.logger.Logger
-import com.wusy.serialportproject.app.URLForOkHttp
 import com.wusy.serialportproject.util.DownAPK.VersionBean
 import com.wusy.serialportproject.util.InterAddressUtil
 import com.wusy.wusylibrary.base.BaseActivity
@@ -20,6 +20,7 @@ import java.io.IOException
 import java.lang.Exception
 import com.wusy.serialportproject.util.DownAPK.DownLoadApkUtil
 import com.wusy.wusylibrary.base.BaseFragment
+import com.wusy.wusylibrary.util.loggerExpand.MyDiskLogAdapter
 
 class CommonFunction {
     fun requestVersion(activity: BaseActivity) {
@@ -57,7 +58,41 @@ class CommonFunction {
                     }
                 })
     }
+    fun requestVersionToUpdate(activity: BaseActivity) {
+        OkHttpUtil.getInstance()
+            .asynGet(
+                URLForOkHttp.requestVersionUpdate(),
+                object : OkHttpUtil.ResultCallBack {
+                    override fun successListener(call: Call?, response: Response?) {
+                        try {
+                            var jsonStr = response?.body()?.string() ?: ""
+                            var bean =
+                                Gson().fromJson<VersionBean>(jsonStr, VersionBean::class.java)
+                            if (bean.status == "0" && bean.data != null) {
+                                bean.data?.get(0)?.run {
+                                    activity.runOnUiThread {
+                                        val version = getVersionCode(activity)
+                                        if (versionNumber > version) {
+                                            Logger.i("Socket更新模式:开始更新")
 
+                                            DownLoadApkUtil(activity).startToUpdate(
+                                                updateUrl ?: "")
+                                        } else {
+                                            Logger.i("Socket更新模式:暂无更新")
+                                        }
+                                    }
+                                }
+                            }
+                        } catch (e: Exception) {
+                            Logger.e(e, "APP更新发生了错误：")
+                        }
+                    }
+
+                    override fun failListener(call: Call?, e: IOException?, message: String?) {
+
+                    }
+                })
+    }
     /**
      * 上传日志
      *  最新日志下载地址
@@ -72,24 +107,29 @@ class CommonFunction {
         Logger.i("系统版本：" + getVersionCode(activity))
         Logger.i("mac地址：" + InterAddressUtil.getMacAddress())
         Logger.i("-------------------------------------------")
+        Logger.clearLogAdapters()
+
         val url = "https://www.hjlapp.com/cgProgramApi/fileUpload/uploadFile?"
         val file =
             File(Environment.getExternalStorageDirectory().toString() + "/logger/LogsByWusyLib_0.log")
         val maps = HashMap<String, String>()
         maps["type"] = "1"
-        Thread.sleep(1000)
         OkHttpUtil.getInstance()
             .upLoadFile(url, "file", file, maps, object : OkHttpUtil.ResultCallBack {
                 override fun failListener(call: Call?, e: IOException?, message: String?) {
                     activity.runOnUiThread {
                         activity.showToast("上传失败,网络错误")
                         Log.e("wsy", e!!.message, e)
+                        Logger.addLogAdapter(MyDiskLogAdapter())
+
                         activity.hideLoadImage()
+                        fragment?.hideLoadImage()
                     }
                 }
 
                 override fun successListener(call: Call?, response: Response?) {
                     activity.runOnUiThread {
+                        Logger.addLogAdapter(MyDiskLogAdapter())
                         val json = JSONObject(response!!.body()!!.string())
                         if (json.getString("status") == "0")
                             activity.showToast(
@@ -118,6 +158,7 @@ class CommonFunction {
     }
     fun cleanLog(){
         delAllFile(Environment.getExternalStorageDirectory().toString() + "/logger/")
+        Logger.i("日志已清除")
     }
     /**
      * 删除文件夹里面的所有文件

@@ -73,6 +73,8 @@ class Constants {
         const val NESTWBTIME="NESTWBTIME"
         //记录背景图片
         const val IMGID="IMGID"
+        //风阀Type 0=小 1=中 2=大 3=自动
+        const val FJType="FJType"
         /**
          * -------------------------------------------------
          */

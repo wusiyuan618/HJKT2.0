@@ -1,35 +1,20 @@
 package com.wusy.serialportproject.ui
 
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
-import android.os.Environment
-import android.os.PowerManager
-import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
 import android.widget.Toast
-import com.google.gson.Gson
-import com.orhanobut.logger.Logger
 import com.wusy.serialportproject.R
+import com.wusy.serialportproject.app.CommonFunction
 import com.wusy.serialportproject.app.Constants
-import com.wusy.serialportproject.app.URLForOkHttp
 import com.wusy.serialportproject.popup.MakeSurePopup
 import com.wusy.serialportproject.popup.NumberEditPopup
 import com.wusy.serialportproject.util.DataUtils
 import com.wusy.serialportproject.util.DownAPK.DownLoadApkUtil
-import com.wusy.serialportproject.util.DownAPK.VersionBean
 import com.wusy.wusylibrary.base.BaseActivity
 import com.wusy.wusylibrary.base.BaseFragment
-import com.wusy.wusylibrary.util.OkHttpUtil
 import com.wusy.wusylibrary.util.SharedPreferencesUtil
-import okhttp3.Call
-import okhttp3.Response
-
-import java.io.IOException
-import java.lang.Exception
 
 class SystemSettingFragment : BaseFragment() {
     lateinit var rlReSet: RelativeLayout
@@ -63,7 +48,7 @@ class SystemSettingFragment : BaseFragment() {
         initUpdateLogPop()
         initSetPhonePop()
         downLoadUtil = DownLoadApkUtil(activity as BaseActivity)
-        commonFunction=CommonFunction()
+        commonFunction= CommonFunction()
 
         rlReSet.setOnClickListener {
             reSetMakeSurePopup.showPopupWindow()

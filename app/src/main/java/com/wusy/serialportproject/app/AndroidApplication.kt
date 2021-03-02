@@ -18,6 +18,7 @@ class AndroidApplication : BaseApplication(){
         super.onCreate()
         //将日志放入本地
         Logger.addLogAdapter(MyDiskLogAdapter())
+
         startSerialPortService()
         startSerialPort3Service()
         startScreenService()

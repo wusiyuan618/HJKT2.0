@@ -83,6 +83,7 @@ class FreshSettingFragment : BaseFragment() {
     lateinit var tvXFIn: TextView
 
     lateinit var rlXFOutSetting: RelativeLayout
+
     lateinit var tvXFOutAuto: TextView
     lateinit var ivXFOutAuto: ImageView
     lateinit var llXFOutAuto: LinearLayout
@@ -423,7 +424,7 @@ class FreshSettingFragment : BaseFragment() {
                 .saveData(Constants.BTN_SETTING_XF_OUT_TYPE, 3)
             context!!.sendBroadcast(Intent().apply {
                 action = CommonConfig.ACTION_ENVAIR_FJ_CONTORL
-                putExtra("FJType",3)
+                putExtra(Constants.FJType,3)
             })
         }
         llXFOutHigh.setOnClickListener {
@@ -432,7 +433,7 @@ class FreshSettingFragment : BaseFragment() {
                 .saveData(Constants.BTN_SETTING_XF_OUT_TYPE, 2)
             context!!.sendBroadcast(Intent().apply {
                 action = CommonConfig.ACTION_ENVAIR_FJ_CONTORL
-                putExtra("FJType",2)
+                putExtra(Constants.FJType,2)
             })
         }
         llXFOutMid.setOnClickListener {
@@ -441,7 +442,7 @@ class FreshSettingFragment : BaseFragment() {
                 .saveData(Constants.BTN_SETTING_XF_OUT_TYPE, 1)
             context!!.sendBroadcast(Intent().apply {
                 action = CommonConfig.ACTION_ENVAIR_FJ_CONTORL
-                putExtra("FJType",1)
+                putExtra(Constants.FJType,1)
             })
         }
         llXFOutMin.setOnClickListener {
@@ -450,7 +451,7 @@ class FreshSettingFragment : BaseFragment() {
                 .saveData(Constants.BTN_SETTING_XF_OUT_TYPE, 0)
             context!!.sendBroadcast(Intent().apply {
                 action = CommonConfig.ACTION_ENVAIR_FJ_CONTORL
-                putExtra("FJType",0)
+                putExtra(Constants.FJType,0)
             })
         }
     }
@@ -590,7 +591,7 @@ class FreshSettingFragment : BaseFragment() {
     }
 
     fun initTemp(): ArrayList<String> {
-        var list = ArrayList<String>()
+        val list = ArrayList<String>()
         for (i in 5..35) {
             list.add("${i}℃")
         }
@@ -598,7 +599,7 @@ class FreshSettingFragment : BaseFragment() {
     }
 
     fun initTime(): ArrayList<String> {
-        var list = ArrayList<String>()
+        val list = ArrayList<String>()
         for (i in 15..59) {
             list.add("${i}分钟")
         }
@@ -606,8 +607,8 @@ class FreshSettingFragment : BaseFragment() {
     }
 
     fun initJSSD(CSCount: String): ArrayList<String> {
-        var cs=CSCount.replace("%RH","").toInt()
-        var list = ArrayList<String>()
+        val cs=CSCount.replace("%RH","").toInt()
+        val list = ArrayList<String>()
         for (i in 30 until (cs - 5)) {
             list.add("${i}%RH")
         }
@@ -615,8 +616,8 @@ class FreshSettingFragment : BaseFragment() {
     }
 
     fun initCS(JSCount: String): ArrayList<String> {
-        var js=JSCount.replace("%RH","").toInt()
-        var list = ArrayList<String>()
+        val js=JSCount.replace("%RH","").toInt()
+        val list = ArrayList<String>()
         for (i in (js + 5)..80) {
             list.add("${i}%RH")
         }

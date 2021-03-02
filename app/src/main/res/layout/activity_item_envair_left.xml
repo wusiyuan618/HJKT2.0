@@ -3,17 +3,24 @@
         android:layout_weight="1"
         xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-            android:id="@+id/tvDate"
+    <LinearLayout
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="34dp"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/ivSD"
+            android:src="@mipmap/icon_js"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/tvDate_marginLeft"
-            android:layout_marginTop="@dimen/tvDate_marginTop"
-            android:text="tvDate"
-        android:visibility="invisible"
-            android:textColor="#FFFFFF"
-            android:textSize="24sp" />
-
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/ivFJ"
+            android:src="@mipmap/icon_fj_min"
+            android:layout_marginLeft="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
     <RelativeLayout
             android:id="@+id/rlHumidity"
             android:layout_width="wrap_content"

@@ -10,7 +10,7 @@
     <dimen name="tvSetting_marginTop">20dp</dimen>
     <dimen name="tempControlView_wid">500dp</dimen>
     <dimen name="rlTempView_wid">600dp</dimen>
-    <dimen name="roomName_marginTop">84dp</dimen>
+    <dimen name="roomName_marginTop">42dp</dimen>
     <dimen name="rlTempView_marginTop">50dp</dimen>
     <dimen name="ivClod_wid">150dp</dimen>
     <dimen name="ivTemp_marginLeft">100dp</dimen>
